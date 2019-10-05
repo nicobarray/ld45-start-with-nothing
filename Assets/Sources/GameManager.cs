@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace LDJAM45
@@ -24,7 +25,10 @@ namespace LDJAM45
         public TMPro.TextMeshProUGUI foodField;
         public Fish fishPrefab;
 
+        [Header("Game State - Do not set in editor")]
         public int fishCount = 0;
+        public Transform camp;
+        public List<Transform> crewCamps = new List<Transform>();
 
         void Update()
         {
