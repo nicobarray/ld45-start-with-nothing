@@ -5,6 +5,7 @@ namespace LDJAM45
     public enum CrewState
     {
         CREATED,
+        SELECTED,
         IDLE,
         WORK
     }
@@ -50,6 +51,7 @@ namespace LDJAM45
                 // ? Move between 0 and 4 around the target.
                 Vector2 destination = targetAround.position.Vec2();
                 destination.x += (UnityEngine.Random.value - 0.5f) * 4;
+                destination.y = origin.y;
                 this.destination = destination;
             }
 
@@ -89,8 +91,13 @@ namespace LDJAM45
             }
         }
 
+        private CrewState prevState = CrewState.CREATED;
         public CrewState state = CrewState.CREATED;
         private State currentState;
+        private bool isAlly = false;
+
+        [Header("References")]
+        public Transform jobMenu;
 
         public void Idle(Transform around)
         {
@@ -99,8 +106,48 @@ namespace LDJAM45
                 currentState.End();
             }
 
-            currentState = new IdleState(transform, 1, around);
+            // ? We want to force the Idle state here.
+            prevState = CrewState.IDLE;
             state = CrewState.IDLE;
+
+            currentState = new IdleState(transform, 1, around);
+        }
+
+        void OnEnable()
+        {
+            GameManager.instance.onClickOutside.AddListener(Unselect);
+            jobMenu.gameObject.SetActive(false);
+        }
+
+        void OnDisable()
+        {
+            GameManager.instance.onClickOutside.RemoveListener(Unselect);
+        }
+
+        public void Select()
+        {
+            Player p = FindObjectOfType<Player>();
+            if (Vector2.Distance(p.transform.position, transform.position) > 10)
+            {
+                return;
+            }
+
+            // ? We selecting a crew mate, unselect everything else.
+            GameManager.instance.onClickOutside.Invoke();
+
+            prevState = state;
+            state = CrewState.SELECTED;
+
+            if (!isAlly)
+            {
+                jobMenu.gameObject.SetActive(true);
+            }
+        }
+
+        public void Unselect()
+        {
+            jobMenu.gameObject.SetActive(false);
+            state = prevState;
         }
 
         void Update()
@@ -110,13 +157,26 @@ namespace LDJAM45
                 return;
             }
 
-            if (state == CrewState.IDLE)
+            if (state == CrewState.SELECTED)
+            {
+                UpdateSelected();
+            }
+            else if (state == CrewState.IDLE)
             {
                 UpdateIdle();
             }
             else if (state == CrewState.WORK)
             {
                 UpdateWork();
+            }
+        }
+
+        void UpdateSelected()
+        {
+            Player p = FindObjectOfType<Player>();
+            if (Vector2.Distance(p.transform.position, transform.position) > 10)
+            {
+                Unselect();
             }
         }
 

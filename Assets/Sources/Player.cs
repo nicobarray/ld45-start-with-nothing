@@ -12,7 +12,6 @@ namespace LDJAM45
         [Header("Player Configuration")]
         public float speed = 5;
 
-
         void Update()
         {
             float horizontalInput = Input.GetAxisRaw("Horizontal");

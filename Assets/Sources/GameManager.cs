@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace LDJAM45
 {
@@ -22,6 +24,7 @@ namespace LDJAM45
             instance = null;
         }
 
+        public UnityEvent onClickOutside;
         public TMPro.TextMeshProUGUI foodField;
         public Fish fishPrefab;
 
@@ -34,11 +37,39 @@ namespace LDJAM45
         {
             foodField.text = fishCount + " fish" + (fishCount > 1 ? "es" : "");
 
+            bool clickOutside = true;
+            // ? If the user is over a UI element, this is not count as "outside".
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                clickOutside = false;
+            }
+
             if (Input.GetMouseButtonDown(0))
             {
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                GameObject fish = Instantiate(fishPrefab.gameObject, mousePosition, Quaternion.identity);
-                Destroy(fish, 5);
+                RaycastHit hit;
+                Ray ray = new Ray(new Vector3(mousePosition.x, mousePosition.y, -10), Vector3.forward);
+
+                Debug.DrawRay(new Vector3(mousePosition.x, mousePosition.y, -10), Vector3.forward * 11, Color.red, 5f);
+                if (Physics.Raycast(ray, out hit, 20))
+                {
+                    var handler = hit.collider.GetComponent<ClickHandler>();
+                    if (handler != null)
+                    {
+                        clickOutside = false;
+                        handler.onClick.Invoke();
+                    }
+                }
+
+                // ? Last thing we check is if the user clicked outside any interactible element. If so, unselect everything.
+                if (clickOutside)
+                {
+                    onClickOutside.Invoke();
+                }
+
+                // ? Uncomment to spawn fish for debug.
+                // GameObject fish = Instantiate(fishPrefab.gameObject, mousePosition, Quaternion.identity);
+                // Destroy(fish, 5);
             }
         }
     }

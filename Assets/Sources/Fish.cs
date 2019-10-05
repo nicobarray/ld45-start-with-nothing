@@ -45,7 +45,6 @@ namespace LDJAM45
 
             if (!isGrounded && hit.collider != null && !hit.collider.isTrigger && hit.distance < 0.1f)
             {
-                print("Hit " + hit.collider.name);
                 isGrounded = true;
                 if (!wasGrounded)
                 {

@@ -117,7 +117,7 @@ namespace LDJAM45
                         for (int c = 0; c < crewMembersCount; c++)
                         {
                             GameObject crewMember = Instantiate(crewPrefab, islandObjectsParent.transform);
-                            crewMember.transform.position = slabGameObject.transform.position.Vec2() + Vector2.up * Utils.GROUND_HEIGHT + Vector2.right * (UnityEngine.Random.value - 0.5f) * 2 * 3;
+                            crewMember.transform.position = slabGameObject.transform.position.Vec2() + Vector2.up * Utils.REAL_GROUND_HEIGHT + Vector2.right * (UnityEngine.Random.value - 0.5f) * 2 * 3;
                             crewMember.GetComponent<Crew>().Idle(campGameObject.transform);
                         }
                     }
