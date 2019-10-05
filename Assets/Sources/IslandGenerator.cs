@@ -14,10 +14,16 @@ namespace LDJAM45
 
     public class IslandGenerator : MonoBehaviour
     {
-        [Header("Slab prefabs")]
+        [Header("Prefabs")]
         public GameObject beachPrefab;
         public GameObject plainPrefab;
         public GameObject forestPrefab;
+
+        public GameObject campPrefab;
+
+        [Header("References")]
+        public Transform slabParent;
+        public Transform islandObjectsParent;
 
         private struct Slab
         {
@@ -49,7 +55,7 @@ namespace LDJAM45
                     slabPrefab = forestPrefab;
                 }
 
-                GameObject slabGameObject = Instantiate(slabPrefab, transform);
+                GameObject slabGameObject = Instantiate(slabPrefab, slabParent);
                 slabGameObject.name = "Slab_" + i + "_" + type.ToString();
                 // ? Each slab is 20 unit of width.
                 slabGameObject.transform.position = new Vector3((i - islandSlabs.Length / 2) * 20, 0);
@@ -59,6 +65,12 @@ namespace LDJAM45
                     gameObject = slabGameObject,
                     type = type
                 };
+
+                if (type == IslandSlab.CAMP)
+                {
+                    GameObject campGameObject = Instantiate(campPrefab, islandObjectsParent.transform);
+                    campGameObject.transform.position = slabGameObject.transform.position.Vec2() + Vector2.up * Utils.GROUND_HEIGHT;
+                }
             }
         }
     }
