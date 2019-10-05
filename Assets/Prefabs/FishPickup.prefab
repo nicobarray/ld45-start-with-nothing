@@ -143,6 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36fbfea60d7a148019b80b7f5bfb8073, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 3636462709349972303}
+  box: {fileID: 3636462709349972302}
   isGrounded: 0
   squashSteps: 5
   stableSteps: 2

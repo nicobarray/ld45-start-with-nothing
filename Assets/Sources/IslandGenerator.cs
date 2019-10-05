@@ -24,6 +24,9 @@ namespace LDJAM45
         public GameObject crewCampPrefab;
         public GameObject crewPrefab;
 
+        [Header("Generator knobs")]
+        int islandSize = 24;
+
         [Header("References")]
         public Transform slabParent;
         public Transform islandObjectsParent;
@@ -35,10 +38,12 @@ namespace LDJAM45
             public IslandSlab type;
         }
 
-        private Slab[] islandSlabs = new Slab[14];
+        private Slab[] islandSlabs;
 
         void Start()
         {
+            islandSlabs = new Slab[islandSize];
+
             for (int i = 0; i < islandSlabs.Length; ++i)
             {
                 IslandSlab type = IslandSlab.PLAIN;
@@ -82,43 +87,26 @@ namespace LDJAM45
 
                 if (islandSlabs[i].type != IslandSlab.CAMP)
                 {
-                    bool validCampPosition = false;
-
-                    if (i == 0)
+                    if (
+                        i != 0
+                        && i != islandSlabs.Length - 1
+                        && islandSlabs[i - 1].type != IslandSlab.CAMP
+                        && islandSlabs[i + 1].type != IslandSlab.CAMP
+                    )
                     {
-                        if (islandSlabs[i + 1].type == IslandSlab.CAMP)
+                        if (UnityEngine.Random.value > 0.5)
                         {
-                            continue;
-                        }
+                            GameObject campGameObject = Instantiate(crewCampPrefab, islandObjectsParent.transform);
+                            campGameObject.transform.position = slabGameObject.transform.position.Vec2() + Vector2.up * 2.18f;
+                            GameManager.instance.crewCamps.Add(campGameObject.transform);
 
-                        validCampPosition = true;
-                    }
-                    else if (i == islandSlabs.Length - 1)
-                    {
-                        if (islandSlabs[i - 1].type == IslandSlab.CAMP)
-                        {
-                            continue;
-                        }
-
-                        validCampPosition = true;
-                    }
-                    else if (islandSlabs[i - 1].type != IslandSlab.CAMP && islandSlabs[i + 1].type != IslandSlab.CAMP)
-                    {
-                        validCampPosition = true;
-                    }
-
-                    if (validCampPosition && UnityEngine.Random.value > 0.5)
-                    {
-                        GameObject campGameObject = Instantiate(crewCampPrefab, islandObjectsParent.transform);
-                        campGameObject.transform.position = slabGameObject.transform.position.Vec2() + Vector2.up * Utils.GROUND_HEIGHT;
-                        GameManager.instance.crewCamps.Add(campGameObject.transform);
-
-                        int crewMembersCount = UnityEngine.Random.Range(1, 3);
-                        for (int c = 0; c < crewMembersCount; c++)
-                        {
-                            GameObject crewMember = Instantiate(crewPrefab, islandObjectsParent.transform);
-                            crewMember.transform.position = slabGameObject.transform.position.Vec2() + Vector2.up * Utils.REAL_GROUND_HEIGHT + Vector2.right * (UnityEngine.Random.value - 0.5f) * 2 * 3;
-                            crewMember.GetComponent<Crew>().Idle(campGameObject.transform);
+                            int crewMembersCount = UnityEngine.Random.Range(1, 3);
+                            for (int c = 0; c < crewMembersCount; c++)
+                            {
+                                GameObject crewMember = Instantiate(crewPrefab, islandObjectsParent.transform);
+                                crewMember.transform.position = slabGameObject.transform.position.Vec2() + Vector2.up * Utils.REAL_GROUND_HEIGHT + Vector2.right * (UnityEngine.Random.value - 0.5f) * 2 * 3;
+                                crewMember.GetComponent<Crew>().Idle(campGameObject.transform);
+                            }
                         }
                     }
                 }

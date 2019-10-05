@@ -10,107 +10,104 @@ namespace LDJAM45
         WORK
     }
 
+    public enum JobType
+    {
+        WANDERER,
+        FISHERMAN,
+        WARRIOR,
+        BUILDER
+    }
+
     public class Crew : MonoBehaviour
     {
-        private abstract class State
-        {
-            public abstract void Begin();
-            public abstract bool Update();
-            public abstract void End();
-        }
-        private class IdleState : State
-        {
-            Transform targetAround;
-            Transform myTransform;
-            float speed = 1;
-
-            Vector2 origin;
-            Vector2 destination;
-            float t = 0;
-
-            bool sleep = true;
-            float sleepTimer = 0;
-
-            public IdleState(Transform myTransform, float speed, Transform targetAround)
-            {
-                this.myTransform = myTransform;
-                this.targetAround = targetAround;
-                this.speed = speed;
-            }
-
-            private void Sleep()
-            {
-                sleep = true;
-                sleepTimer = 0;
-            }
-
-            public override void Begin()
-            {
-                origin = myTransform.position;
-
-                // ? Move between 0 and 4 around the target.
-                Vector2 destination = targetAround.position.Vec2();
-                destination.x += (UnityEngine.Random.value - 0.5f) * 4;
-                destination.y = origin.y;
-                this.destination = destination;
-            }
-
-            public override void End()
-            {
-                print("Idle state ends");
-            }
-
-            public override bool Update()
-            {
-                if (sleep)
-                {
-                    sleepTimer += Time.deltaTime;
-                    if (sleepTimer > 5)
-                    {
-                        sleepTimer -= 5;
-                        sleep = false;
-                        Begin();
-                    }
-
-                    return false;
-                }
-
-                if (t >= 1)
-                {
-                    t = 0;
-                    // ? Loop the IdleState for now.
-                    Sleep();
-                    // TODO: return true to work !
-                    return false;
-                }
-
-                t += Time.deltaTime * speed;
-                myTransform.position = Vector2.Lerp(origin, destination, t);
-
-                return false;
-            }
-        }
-
         private CrewState prevState = CrewState.CREATED;
         public CrewState state = CrewState.CREATED;
-        private State currentState;
+
+        public JobType job = JobType.WANDERER;
+        private State stateHandler;
+
         private bool isAlly = false;
+        private Transform lastTargetAround;
+
+        [Header("Assets")]
+        public Sprite wandererSprite;
+        public Sprite fishermanSprite;
+        public Sprite builderSprite;
+        public Sprite warriorSprite;
+
+        public Sprite fishermanWorkingSprite;
+        public Sprite builderWorkingSprite;
+        public Sprite warriorWorkingSprite;
 
         [Header("References")]
         public Transform jobMenu;
+        public SpriteRenderer spriteRenderer;
 
         public void Idle(Transform around)
         {
-            if (currentState != null)
+            if (stateHandler != null)
             {
-                currentState.End();
+                stateHandler.End();
             }
 
             // ? We want to force the Idle state here.
             prevState = CrewState.IDLE;
             state = CrewState.IDLE;
 
-            currentState = new IdleState(transform, 1, around);
+            stateHandler = new IdleState(transform, around);
+            lastTargetAround = around;
+            stateHandler.Begin();
+        }
+
+        public void Work(Transform around)
+        {
+            if (stateHandler != null)
+            {
+                stateHandler.End();
+            }
+
+            // ? We want to force the Idle state here.
+            state = CrewState.WORK;
+            stateHandler = new WorkState(transform, job, (end) => { spriteRenderer.sprite = end ? fishermanSprite : fishermanWorkingSprite; });
+            stateHandler.Begin();
+            lastTargetAround = around;
+        }
+
+        public void RecruitBuilder()
+        {
+            Recruit(JobType.BUILDER);
+        }
+
+        public void RecruitWarrior()
+        {
+            Recruit(JobType.WARRIOR);
+        }
+
+        public void RecruitFisherman()
+        {
+            Recruit(JobType.FISHERMAN);
+        }
+
+        public bool Recruit(JobType job)
+        {
+            if (this.job != JobType.WANDERER)
+            {
+                return false;
+            }
+
+            if (GameManager.instance.fishCount == 0)
+            {
+                return false;
+            }
+
+            GameManager.instance.fishCount--;
+            this.job = job;
+            spriteRenderer.sprite = GetSprite();
+
+            Unselect();
+
+            Idle(GameManager.instance.camp);
+            return true;
         }
 
         void OnEnable()
@@ -128,6 +125,11 @@ namespace LDJAM45
         {
             Player p = FindObjectOfType<Player>();
             if (Vector2.Distance(p.transform.position, transform.position) > 10)
+            {
+                return;
+            }
+
+            if (job != JobType.WANDERER)
             {
                 return;
             }
@@ -161,13 +163,31 @@ namespace LDJAM45
             {
                 UpdateSelected();
             }
-            else if (state == CrewState.IDLE)
+            else if (state == CrewState.IDLE || state == CrewState.WORK)
             {
-                UpdateIdle();
-            }
-            else if (state == CrewState.WORK)
-            {
-                UpdateWork();
+                CrewState nextState = stateHandler.Update();
+
+                if (job == JobType.WANDERER)
+                {
+                    // ? A wanderer does not have a job.
+                    return;
+                }
+
+                if (nextState != state)
+                {
+                    prevState = state;
+                    state = nextState;
+                    stateHandler.End();
+
+                    if (nextState == CrewState.IDLE)
+                    {
+                        Idle(lastTargetAround);
+                    }
+                    else if (nextState == CrewState.WORK)
+                    {
+                        Work(lastTargetAround);
+                    }
+                }
             }
         }
 
@@ -180,17 +200,21 @@ namespace LDJAM45
             }
         }
 
-        void UpdateIdle()
+        Sprite GetSprite()
         {
-            if (currentState.Update())
+            switch (job)
             {
-                currentState.End();
+                case JobType.WANDERER:
+                    return wandererSprite;
+                case JobType.BUILDER:
+                    return builderSprite;
+                case JobType.FISHERMAN:
+                    return fishermanSprite;
+                case JobType.WARRIOR:
+                    return warriorSprite;
+                default:
+                    return wandererSprite;
             }
-        }
-
-        void UpdateWork()
-        {
-
         }
     }
 }

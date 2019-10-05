@@ -72,5 +72,11 @@ namespace LDJAM45
                 // Destroy(fish, 5);
             }
         }
+
+        public void SpawnFish(Vector2 position)
+        {
+            GameObject fish = Instantiate(fishPrefab.gameObject, position, Quaternion.identity);
+            Destroy(fish, 30);
+        }
     }
 }

@@ -14,6 +14,13 @@ namespace LDJAM45
 
         void Update()
         {
+            float boost = 1;
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                boost = 10;
+            }
+
             float horizontalInput = Input.GetAxisRaw("Horizontal");
 
             if (horizontalInput == 0)
@@ -21,7 +28,7 @@ namespace LDJAM45
                 return;
             }
 
-            transform.Translate(Vector2.right * horizontalInput * speed * Time.deltaTime);
+            transform.Translate(Vector2.right * horizontalInput * speed * boost * Time.deltaTime);
         }
 
         void OnTriggerEnter2D(Collider2D other)

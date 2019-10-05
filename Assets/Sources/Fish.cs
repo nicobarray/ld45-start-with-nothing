@@ -5,6 +5,9 @@ namespace LDJAM45
 {
     public class Fish : MonoBehaviour
     {
+        public Rigidbody2D rb;
+        public BoxCollider2D box;
+
         public bool isGrounded = false;
         private Coroutine coroutine;
 
@@ -35,7 +38,16 @@ namespace LDJAM45
 
         void Start()
         {
-            GetComponent<Rigidbody2D>().velocity = new Vector2(UnityEngine.Random.insideUnitCircle.x, 5);
+            rb.velocity = new Vector2(UnityEngine.Random.insideUnitCircle.x * 2, 10);
+            box.enabled = false;
+        }
+
+        void Update()
+        {
+            if (!box.enabled && rb.velocity.y < 0f)
+            {
+                box.enabled = true;
+            }
         }
 
         void FixedUpdate()
