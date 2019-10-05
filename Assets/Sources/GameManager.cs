@@ -68,7 +68,7 @@ namespace LDJAM45
                 }
 
                 // ? Uncomment to spawn fish for debug.
-                // GameObject fish = Instantiate(fishPrefab.gameObject, mousePosition, Quaternion.identity);
+                GameObject fish = Instantiate(fishPrefab.gameObject, mousePosition, Quaternion.identity);
                 // Destroy(fish, 5);
             }
         }
