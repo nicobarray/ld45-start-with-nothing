@@ -35,7 +35,6 @@ namespace LDJAM45
         private struct Slab
         {
             public GameObject prefab;
-            public GameObject gameObject;
             public IslandSlab type;
         }
 

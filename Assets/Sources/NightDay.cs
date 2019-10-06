@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.LWRP;
 
 namespace LDJAM45
 {
@@ -7,14 +8,20 @@ namespace LDJAM45
         float time = 0;
         float relativeTime = 0;
 
-        public Color dayTint;
-        public Color nightTint;
         public float timeSpeed = 1;
+
+        [Range(0.5f, 1)]
+        public float dayIntensity;
         public int dayLength = 1;
+        public Color dayTint;
+        [Range(0, 0.5f)]
+        public float nightIntensity;
         public int nightLength = 1;
+        public Color nightTint;
 
         public TMPro.TextMeshProUGUI clockField;
         public Sprite sprite;
+        public Light2D skylight;
 
         void PlotFish(Color color, float x, float y)
         {
@@ -32,8 +39,6 @@ namespace LDJAM45
         void Update()
         {
             time += Time.deltaTime * timeSpeed;
-
-            var sprites = FindObjectsOfType<SpriteRenderer>();
 
             relativeTime = time;
 
@@ -68,10 +73,8 @@ namespace LDJAM45
             // PlotFish(new Color(256, 0, 256, 0.25f), time, Mathf.Sin(4 * time) / 2 + 0.5f);
             // PlotFish(Color.red, time, relativeTime);
 
-            foreach (var item in sprites)
-            {
-                item.color = Color.Lerp(nightTint, dayTint, relativeTime);
-            }
+            skylight.intensity = Mathf.LerpAngle(nightIntensity, dayIntensity, relativeTime);
+            skylight.color = Color.Lerp(nightTint, dayTint, relativeTime);
         }
     }
 }

@@ -7,7 +7,6 @@ namespace LDJAM45
         float x = 0;
         float v = 0;
         float t = 0;
-        float angle = 0;
 
         Vector2 origin;
         public Transform movingTarget;

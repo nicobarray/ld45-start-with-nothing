@@ -3,9 +3,8 @@ using UnityEngine;
 
 namespace LDJAM45
 {
-    public class CrewAnimation : MonoBehaviour
+    public class PlayerAnimation : MonoBehaviour
     {
-        public Crew crew;
         bool reverse = false;
 
         [Serializable]
@@ -18,7 +17,6 @@ namespace LDJAM45
 
         public StateParamaters idleState;
         public StateParamaters walkState;
-        public StateParamaters workState;
 
         // ? Do not use. Needed for GetParams return value.
         private StateParamaters defaultState = new StateParamaters
@@ -38,23 +36,17 @@ namespace LDJAM45
             defaultLocalScale = Vector3.one;
         }
 
-        StateParamaters GetParams(CrewState state)
+        StateParamaters GetParams()
         {
             bool isWalking = prevPosition != transform.position;
             prevPosition = transform.position;
 
-            return state == CrewState.IDLE
-                            ? (isWalking
-                                ? walkState
-                                : idleState)
-                            : (state == CrewState.WORK
-                                ? workState
-                                : defaultState);
+            return isWalking ? walkState : idleState;
         }
 
         void Update()
         {
-            StateParamaters param = GetParams(crew.state);
+            StateParamaters param = GetParams();
 
             t += (reverse ? -param.reverseSpeed : param.squashSpeed) * Time.deltaTime;
 
