@@ -8,8 +8,6 @@ namespace LDJAM45
         Transform myTransform;
         JobType job;
 
-        float fishingSpotX = 0;
-
         Vector2 origin;
         Vector2 destination;
         Vector2 workPlace;
@@ -28,18 +26,27 @@ namespace LDJAM45
 
         public override void Begin()
         {
-            float offset = (UnityEngine.Random.value - 0.5f) * 2 * 4;
-
-            fishingSpotX = 1;
-            if (UnityEngine.Random.value > 0.5)
+            if (job == JobType.FISHERMAN)
             {
-                fishingSpotX = -1;
+                float fishingSpotX = 0;
+                float offset = (UnityEngine.Random.value - 0.5f) * 2 * 4;
+
+                fishingSpotX = 1;
+                if (UnityEngine.Random.value > 0.5)
+                {
+                    fishingSpotX = -1;
+                }
+
+                fishingSpotX *= 5;
+                fishingSpotX += offset;
+                workPlace = new Vector2(fishingSpotX, myTransform.position.y);
+            }
+            else if (job == JobType.BUILDER)
+            {
+                float offset = (UnityEngine.Random.value - 0.5f) * 2 * 2;
+                workPlace = new Vector2(GameManager.instance.boatCamp.position.x + offset, myTransform.position.y);
             }
 
-            fishingSpotX *= 5;
-            fishingSpotX += offset;
-
-            workPlace = new Vector2(fishingSpotX, myTransform.position.y);
             destination = workPlace;
             origin = myTransform.position;
         }
@@ -63,8 +70,27 @@ namespace LDJAM45
             {
                 GameManager.instance.SpawnFish(myTransform.position);
             }
+            else if (job == JobType.BUILDER)
+            {
+                GameManager.instance.boatProgress += 0.1f;
+            }
 
             StartTask();
+        }
+
+        private float GetJobDuration()
+        {
+            if (job == JobType.FISHERMAN)
+            {
+                return 30;
+            }
+
+            if (job == JobType.BUILDER)
+            {
+                return 3;
+            }
+
+            return 3;
         }
 
         public override CrewState Update()
@@ -73,7 +99,7 @@ namespace LDJAM45
             if (taskDuration)
             {
                 taskDurationTimer += Time.deltaTime;
-                if (taskDurationTimer > 3)
+                if (taskDurationTimer > GetJobDuration())
                 {
                     Work();
                 }
@@ -81,11 +107,10 @@ namespace LDJAM45
                 return CrewState.WORK;
             }
 
-
             // ? Go to his job.
-            t += Time.deltaTime;
             float deltaX = Vector2.Distance(origin, destination);
-            myTransform.position = Vector2.Lerp(origin, destination, t / deltaX);
+            t += Time.deltaTime / deltaX;
+            myTransform.position = Vector2.Lerp(origin, destination, t);
 
             // ? Once the dude arrives at his job, work.
             if (t >= 1)

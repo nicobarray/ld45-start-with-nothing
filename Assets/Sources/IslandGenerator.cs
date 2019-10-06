@@ -23,6 +23,7 @@ namespace LDJAM45
         // ? Camps around the island where old crew members are established.
         public GameObject crewCampPrefab;
         public GameObject crewPrefab;
+        public GameObject boatConstructionSitePrefab;
 
         [Header("Generator knobs")]
         int islandSize = 24;
@@ -81,8 +82,12 @@ namespace LDJAM45
                 if (islandSlabs[i].type == IslandSlab.CAMP)
                 {
                     GameObject campGameObject = Instantiate(campPrefab, islandObjectsParent.transform);
-                    campGameObject.transform.position = slabGameObject.transform.position.Vec2() + Vector2.up * Utils.GROUND_HEIGHT;
+                    campGameObject.transform.position = slabGameObject.transform.position.Vec2() + Vector2.up * 2;
                     GameManager.instance.camp = campGameObject.transform;
+
+                    GameObject boatCampGameObject = Instantiate(boatConstructionSitePrefab, islandObjectsParent.transform);
+                    boatCampGameObject.transform.position = new Vector2(slabGameObject.transform.position.Vec2().x + 10, 0);
+                    GameManager.instance.boatCamp = boatCampGameObject.transform;
                 }
 
                 if (islandSlabs[i].type != IslandSlab.CAMP)

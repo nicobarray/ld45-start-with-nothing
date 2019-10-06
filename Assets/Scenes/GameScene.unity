@@ -334,6 +334,8 @@ MonoBehaviour:
     type: 3}
   crewPrefab: {fileID: 3847527320514715790, guid: a0e6e1ade4f11445ebccc6e0aaa437e2,
     type: 3}
+  boatConstructionSitePrefab: {fileID: 4548655493617962445, guid: fc92029798d6147bc9f6b32d7ab125b3,
+    type: 3}
   slabParent: {fileID: 208367786}
   islandObjectsParent: {fileID: 356968622}
 --- !u!4 &1356402034 stripped
@@ -455,7 +457,7 @@ PrefabInstance:
     - target: {fileID: 1974522457107830561, guid: 901e642fc81a84c90ad8057f83afba2d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.52
+      value: 2.1
       objectReference: {fileID: 0}
     - target: {fileID: 1974522457107830561, guid: 901e642fc81a84c90ad8057f83afba2d,
         type: 3}
@@ -529,7 +531,7 @@ PrefabInstance:
     - target: {fileID: 2433007167340155041, guid: 8c54c3556ab264837b4409a37f358e03,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.6224003
+      value: 5.5719995
       objectReference: {fileID: 0}
     - target: {fileID: 2433007167340155041, guid: 8c54c3556ab264837b4409a37f358e03,
         type: 3}
@@ -618,7 +620,7 @@ PrefabInstance:
     - target: {fileID: 2686212718089918199, guid: 2b80ac90f75464a2f92ffd4cb889cd49,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.6224003
+      value: 5.5719995
       objectReference: {fileID: 0}
     - target: {fileID: 2686212718089918199, guid: 2b80ac90f75464a2f92ffd4cb889cd49,
         type: 3}

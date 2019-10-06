@@ -30,8 +30,15 @@ namespace LDJAM45
 
         [Header("Game State - Do not set in editor")]
         public int fishCount = 0;
+        public float boatProgress = 0;
         public Transform camp;
+        public Transform boatCamp;
         public List<Transform> crewCamps = new List<Transform>();
+
+        void Start()
+        {
+            Instantiate(fishPrefab.gameObject, new Vector2(0, 5), Quaternion.identity);
+        }
 
         void Update()
         {
@@ -68,8 +75,7 @@ namespace LDJAM45
                 }
 
                 // ? Uncomment to spawn fish for debug.
-                GameObject fish = Instantiate(fishPrefab.gameObject, mousePosition, Quaternion.identity);
-                // Destroy(fish, 5);
+
             }
         }
 

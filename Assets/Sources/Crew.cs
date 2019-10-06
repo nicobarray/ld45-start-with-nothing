@@ -56,7 +56,6 @@ namespace LDJAM45
 
             stateHandler = new IdleState(transform, around);
             lastTargetAround = around;
-            stateHandler.Begin();
         }
 
         public void Work(Transform around)
@@ -68,8 +67,25 @@ namespace LDJAM45
 
             // ? We want to force the Idle state here.
             state = CrewState.WORK;
-            stateHandler = new WorkState(transform, job, (end) => { spriteRenderer.sprite = end ? fishermanSprite : fishermanWorkingSprite; });
-            stateHandler.Begin();
+            stateHandler = new WorkState(transform, job, (end) =>
+            {
+                if (job == JobType.FISHERMAN)
+                {
+                    spriteRenderer.sprite = end ? fishermanSprite : fishermanWorkingSprite;
+                }
+                else if (job == JobType.BUILDER)
+                {
+                    spriteRenderer.sprite = end ? builderSprite : builderWorkingSprite;
+                }
+                else if (job == JobType.WARRIOR)
+                {
+                    spriteRenderer.sprite = end ? warriorSprite : warriorWorkingSprite;
+                }
+                else
+                {
+                    spriteRenderer.sprite = wandererSprite;
+                }
+            });
             lastTargetAround = around;
         }
 
@@ -175,6 +191,8 @@ namespace LDJAM45
 
                 if (nextState != state)
                 {
+                    Debug.Log(state + " -> " + nextState);
+
                     prevState = state;
                     state = nextState;
                     stateHandler.End();
@@ -187,6 +205,8 @@ namespace LDJAM45
                     {
                         Work(lastTargetAround);
                     }
+
+                    stateHandler.Begin();
                 }
             }
         }

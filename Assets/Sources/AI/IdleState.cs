@@ -6,7 +6,6 @@ namespace LDJAM45
     {
         Transform targetAround;
         Transform myTransform;
-        float speed = 1;
 
         Vector2 origin;
         Vector2 destination;
@@ -19,7 +18,6 @@ namespace LDJAM45
         {
             this.myTransform = myTransform;
             this.targetAround = targetAround;
-            this.speed = 1;
         }
 
         private void Sleep()
