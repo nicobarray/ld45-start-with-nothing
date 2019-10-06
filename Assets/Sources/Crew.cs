@@ -134,7 +134,10 @@ namespace LDJAM45
 
         void OnDisable()
         {
-            GameManager.instance.onClickOutside.RemoveListener(Unselect);
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.onClickOutside.RemoveListener(Unselect);
+            }
         }
 
         public void Select()

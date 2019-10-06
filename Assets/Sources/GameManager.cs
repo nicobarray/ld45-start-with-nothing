@@ -27,6 +27,7 @@ namespace LDJAM45
         public UnityEvent onClickOutside;
         public TMPro.TextMeshProUGUI foodField;
         public Fish fishPrefab;
+        public Wolf wolfPrefab;
 
         [Header("Game State - Do not set in editor")]
         public int fishCount = 0;
@@ -75,7 +76,7 @@ namespace LDJAM45
                 }
 
                 // ? Uncomment to spawn fish for debug.
-
+                Instantiate(wolfPrefab.gameObject, new Vector2(mousePosition.x, Utils.REAL_GROUND_HEIGHT), Quaternion.identity);
             }
         }
 
