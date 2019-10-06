@@ -28,6 +28,16 @@ namespace LDJAM45
                 return;
             }
 
+            if (transform.position.x < GameManager.instance.leftShore.position.x && horizontalInput < 0)
+            {
+                return;
+            }
+
+            if (transform.position.x > GameManager.instance.rightShore.position.x && horizontalInput > 0)
+            {
+                return;
+            }
+
             transform.Translate(Vector2.right * horizontalInput * speed * boost * Time.deltaTime);
         }
 

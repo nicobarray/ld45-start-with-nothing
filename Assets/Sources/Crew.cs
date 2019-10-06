@@ -173,6 +173,7 @@ namespace LDJAM45
 
         void Update()
         {
+
             if (state == CrewState.CREATED)
             {
                 return;

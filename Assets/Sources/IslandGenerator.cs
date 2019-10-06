@@ -79,6 +79,23 @@ namespace LDJAM45
                 // ? Each slab is 20 unit of width.
                 slabGameObject.transform.position = new Vector3((i - islandSlabs.Length / 2) * 20, 0);
 
+                if (i == 0)
+                {
+                    var slabSpriteRenderers = slabGameObject.GetComponentsInChildren<SpriteRenderer>();
+
+                    foreach (var item in slabSpriteRenderers)
+                    {
+                        item.flipX = true;
+                    }
+
+                    GameManager.instance.leftShore = slabGameObject.transform;
+                }
+
+                if (i == islandSlabs.Length - 1)
+                {
+                    GameManager.instance.rightShore = slabGameObject.transform;
+                }
+
                 if (islandSlabs[i].type == IslandSlab.CAMP)
                 {
                     GameObject campGameObject = Instantiate(campPrefab, islandObjectsParent.transform);

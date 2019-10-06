@@ -35,6 +35,8 @@ namespace LDJAM45
         public Transform camp;
         public Transform boatCamp;
         public List<Transform> crewCamps = new List<Transform>();
+        public Transform leftShore;
+        public Transform rightShore;
 
         void Start()
         {

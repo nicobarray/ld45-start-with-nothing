@@ -497,6 +497,7 @@ GameObject:
   - component: {fileID: 3847527320514715824}
   - component: {fileID: 3847527320514715791}
   - component: {fileID: 3847527320514715827}
+  - component: {fileID: 5149695382296572391}
   m_Layer: 0
   m_Name: Crew Dude
   m_TagString: Untagged
@@ -642,6 +643,31 @@ MonoBehaviour:
     type: 3}
   jobMenu: {fileID: 3132036509820275115}
   spriteRenderer: {fileID: 3847527320514715825}
+--- !u!114 &5149695382296572391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3847527320514715790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78c94321767a2434bade2281f750f38e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crew: {fileID: 3847527320514715827}
+  idleState:
+    target: {x: 1.05, y: 0.95}
+    squashSpeed: 1
+    reverseSpeed: 1
+  walkState:
+    target: {x: 1.05, y: 0.95}
+    squashSpeed: 4
+    reverseSpeed: 2
+  workState:
+    target: {x: 1.1, y: 0.9}
+    squashSpeed: 3
+    reverseSpeed: 1.5
 --- !u!1 &4680752840554238703
 GameObject:
   m_ObjectHideFlags: 0
