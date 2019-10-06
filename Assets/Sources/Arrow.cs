@@ -12,29 +12,39 @@ namespace LDJAM45
 
         float t = 0;
         float arrowSpeed = 1;
+        bool isGrounded = false;
 
-        public void SetTarget(Vector2 wolf, float arrowSpeed, float offset = 0)
+        float attenuation = 0;
+        float distance = 0;
+
+        public void SetTarget(Vector2 wolf, float arrowSpeed)
         {
             this.arrowSpeed = arrowSpeed;
-            // TODO: Fire the arrow slightly in front ?
             destination = wolf;
             origin = transform.position;
+            distance = Mathf.Abs(origin.x - destination.x);
+            attenuation = (UnityEngine.Random.value > 0.5) ? distance * 2 : distance * 0.5f;
         }
 
         void Update()
         {
             t += Time.deltaTime * 0.5f * arrowSpeed;
 
-            float distance = Mathf.Abs(origin.x - destination.x);
             float xOrientation = destination.x - origin.x > 0 ? 1 : -1;
-            float y = -t * t + distance * t;
+            float x = xOrientation * t;
+            float y = -Mathf.Pow(t, 2) / attenuation + distance * t / attenuation;
 
-            Vector2 nextPosition = new Vector2(origin.x + distance * xOrientation * t, origin.y + y);
+            Vector2 nextPosition = new Vector2(origin.x + x, origin.y + y);
             Vector2 direction = (nextPosition - transform.position.Vec2()).normalized;
             bool isFalling = direction.y < 0;
 
             transform.position = nextPosition;
             transform.rotation = Quaternion.Euler(0, 0, (isFalling ? -1 : 1) * Vector2.Angle(Vector2.right, direction));
+
+            if (transform.position.y < Utils.REAL_GROUND_HEIGHT)
+            {
+                Destroy(this);
+            }
         }
     }
 }

@@ -75,5 +75,16 @@ namespace LDJAM45
                 Destroy(gameObject);
             }
         }
+
+        void OnTriggerEnter2D(Collider2D other)
+        {
+            Arrow arrow = other.GetComponent<Arrow>();
+
+            if (arrow != null)
+            {
+                Destroy(arrow.gameObject);
+                Destroy(gameObject);
+            }
+        }
     }
 }

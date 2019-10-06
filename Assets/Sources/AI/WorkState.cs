@@ -15,10 +15,12 @@ namespace LDJAM45
 
         bool taskDuration = false;
         float taskDurationTimer = 0;
-        Action<bool> updateSprite;
+        Action<bool, bool> updateSprite;
         Action<Vector2, Vector2> spawnArrow;
 
-        public WorkState(Transform myTransform, JobType job, Action<bool> updateSprite, Action<Vector2, Vector2> spawnArrow)
+        float randomOffsetX = 2;
+
+        public WorkState(Transform myTransform, JobType job, Action<bool, bool> updateSprite, Action<Vector2, Vector2> spawnArrow)
         {
             this.myTransform = myTransform;
             this.job = job;
@@ -51,7 +53,7 @@ namespace LDJAM45
             else if (job == JobType.WARRIOR)
             {
                 // ? Either stand at the left or the right hand-side of the camp.
-                float offset = Mathf.Sign(UnityEngine.Random.value - 0.5f) * 2 * 8;
+                float offset = Mathf.Sign(UnityEngine.Random.value - 0.5f) * 2 * 8 + UnityEngine.Random.insideUnitCircle.x * 2;
                 workPlace = new Vector2(GameManager.instance.camp.position.x + offset, myTransform.position.y);
             }
 
@@ -61,14 +63,14 @@ namespace LDJAM45
 
         public override void End()
         {
-            updateSprite(true);
+            updateSprite(true, false);
         }
 
         private void StartTask()
         {
             taskDuration = true;
             taskDurationTimer = 0;
-            updateSprite(false);
+            updateSprite(false, workPlace.x - GameManager.instance.camp.transform.position.x > 0 ? false : true);
         }
 
         private CrewState Work()
@@ -98,19 +100,19 @@ namespace LDJAM45
                 }
 
                 // ? The warrior only fire an arrow if a wolf is in sight.
-                if (closestWolf != null)
+                if (closestWolf != null && Vector2.Distance(closestWolf.transform.position, myTransform.position) < 10)
                 {
+                    updateSprite(false, workPlace.x - closestWolf.transform.position.x > 0 ? false : true);
                     spawnArrow.Invoke(
                         myTransform.position.Vec2()
                             + Vector2.up
-                            + Vector2.right * Mathf.Sign(closestWolf.transform.position.x - myTransform.position.x),
-                        closestWolf.transform.position
+                            + Vector2.right * (closestWolf.transform.position.x > myTransform.position.x ? 1 : -1),
+                        closestWolf.transform.position.Vec2() + Vector2.right * (UnityEngine.Random.value - 0.5f) * 2 * randomOffsetX
                     );
-                    return CrewState.WORK;
                 }
                 else
                 {
-                    return CrewState.IDLE;
+                    return CrewState.WORK;
                 }
             }
 
@@ -150,7 +152,7 @@ namespace LDJAM45
 
             // ? Go to his job.
             float deltaX = Vector2.Distance(origin, destination);
-            t += Time.deltaTime / deltaX;
+            t += (Time.deltaTime / deltaX) * 5;
             myTransform.position = Vector2.Lerp(origin, destination, t);
 
             // ? Once the dude arrives at his job, work.

@@ -69,7 +69,7 @@ namespace LDJAM45
 
             // ? We want to force the Idle state here.
             state = CrewState.WORK;
-            stateHandler = new WorkState(transform, job, (end) =>
+            stateHandler = new WorkState(transform, job, (end, flipX) =>
             {
                 if (job == JobType.FISHERMAN)
                 {
@@ -87,10 +87,13 @@ namespace LDJAM45
                 {
                     spriteRenderer.sprite = wandererSprite;
                 }
+
+                spriteRenderer.flipX = flipX;
             }, (origin, destination) =>
             {
                 GameObject arrowGameObject = Instantiate(arrowPrefab.gameObject, origin, Quaternion.identity);
-                arrowGameObject.GetComponent<Arrow>().SetTarget(destination, 5);
+                arrowGameObject.GetComponent<Arrow>().SetTarget(destination, 25);
+                Destroy(arrowGameObject, 10);
             });
             lastTargetAround = around;
         }
@@ -173,6 +176,12 @@ namespace LDJAM45
 
         public void Unselect()
         {
+            // ? Only do this if the crew mate is selected.
+            if (state != CrewState.SELECTED)
+            {
+                return;
+            }
+
             jobMenu.gameObject.SetActive(false);
             state = prevState;
         }

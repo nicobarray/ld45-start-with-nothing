@@ -70,7 +70,7 @@ namespace LDJAM45
             }
 
             float deltaX = Vector2.Distance(origin, destination);
-            t += Time.deltaTime / deltaX;
+            t += (Time.deltaTime / deltaX) * 5;
             myTransform.position = Vector2.Lerp(origin, destination, t);
             return CrewState.IDLE;
         }
