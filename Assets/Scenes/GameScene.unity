@@ -338,6 +338,22 @@ MonoBehaviour:
     type: 3}
   slabParent: {fileID: 208367786}
   islandObjectsParent: {fileID: 356968622}
+--- !u!114 &1304064441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1304064437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bec280b3517de43ad95a619258989bbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dayTint: {r: 1, g: 1, b: 1, a: 1}
+  nightTint: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  clockField: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 9da5323d83eeb4655ab49c0d64ea7cb6, type: 3}
 --- !u!4 &1356402034 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2686212718089918199, guid: 2b80ac90f75464a2f92ffd4cb889cd49,
@@ -597,6 +613,21 @@ PrefabInstance:
         type: 3}
       propertyPath: orthographic size
       value: 5.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433007167340154974, guid: 8c54c3556ab264837b4409a37f358e03,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.29803923
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433007167340154974, guid: 8c54c3556ab264837b4409a37f358e03,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.22745098
+      objectReference: {fileID: 0}
+    - target: {fileID: 2433007167340154974, guid: 8c54c3556ab264837b4409a37f358e03,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.29803923
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c54c3556ab264837b4409a37f358e03, type: 3}

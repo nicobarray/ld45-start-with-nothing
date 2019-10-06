@@ -45,7 +45,7 @@ namespace LDJAM45
 
         void Update()
         {
-            foodField.text = fishCount + " fish" + (fishCount > 1 ? "es" : "");
+            foodField.text = "x " + fishCount;
 
             bool clickOutside = true;
             // ? If the user is over a UI element, this is not count as "outside".
