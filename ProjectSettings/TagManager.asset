@@ -44,11 +44,17 @@ TagManager:
   - name: Background
     uniqueID: 4043875513
     locked: 0
+  - name: Background_Buildings
+    uniqueID: 4175826939
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
   - name: Forground
     uniqueID: 3959270891
+    locked: 0
+  - name: Forground_Buildings
+    uniqueID: 1458342909
     locked: 0
   - name: UI
     uniqueID: 2682900963

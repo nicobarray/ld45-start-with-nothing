@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2834304142414352876}
   - component: {fileID: 6274795226596930267}
+  - component: {fileID: 1304064438}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -43,5 +44,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f8e24f260b8b48c3a185c57367fa387, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onClickOutside:
+    m_PersistentCalls:
+      m_Calls: []
   foodField: {fileID: 0}
-  food: 0
+  fishPrefab: {fileID: 3636462709349972291, guid: e40a9a26434ae404ebfd8026b2d3cf7a,
+    type: 3}
+  wolfPrefab: {fileID: 4198248595603070130, guid: 78ebfc2dc07ac461bb5b261aaa8fbd85,
+    type: 3}
+  arrowPrefab: {fileID: -6294567521634339098, guid: d26a77fd53b30494db8c7f89df7c41a5,
+    type: 3}
+  fishCount: 0
+  boatProgress: 0
+  camp: {fileID: 0}
+  boatCamp: {fileID: 0}
+  crewCamps: []
+  leftShore: {fileID: 0}
+  rightShore: {fileID: 0}
+--- !u!114 &1304064438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4310058745549718882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02a3c0a2b07a34a50b550a3aa2aef09d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  beachPrefab: {fileID: 2247224403025946237, guid: 6b7e49e49278f4b75a84a119bb5720d2,
+    type: 3}
+  plainPrefab: {fileID: 2247224403025946237, guid: f9f511f5b1e5f4fc08f516b1b50f559e,
+    type: 3}
+  forestPrefab: {fileID: 2247224403025946237, guid: 70ec1fc3081bb4854806b2e8d6bbf845,
+    type: 3}
+  campPrefab: {fileID: 4548655493617962445, guid: 908c67d212af94844b0e0bfc926b0d8e,
+    type: 3}
+  crewCampPrefab: {fileID: 4548655493617962445, guid: 173c1c6a04ef64d35a354be5a50af261,
+    type: 3}
+  crewPrefab: {fileID: 3847527320514715790, guid: a0e6e1ade4f11445ebccc6e0aaa437e2,
+    type: 3}
+  boatConstructionSitePrefab: {fileID: 4548655493617962445, guid: fc92029798d6147bc9f6b32d7ab125b3,
+    type: 3}
+  slabParent: {fileID: 0}
+  islandObjectsParent: {fileID: 0}

@@ -26,8 +26,11 @@ namespace LDJAM45
 
         public UnityEvent onClickOutside;
         public TMPro.TextMeshProUGUI foodField;
+
+        [Header("Prefabs")]
         public Fish fishPrefab;
         public Wolf wolfPrefab;
+        public Arrow arrowPrefab;
 
         [Header("Game State - Do not set in editor")]
         public int fishCount = 0;
@@ -78,14 +81,38 @@ namespace LDJAM45
                 }
 
                 // ? Uncomment to spawn fish for debug.
-                // Instantiate(wolfPrefab.gameObject, new Vector2(mousePosition.x, Utils.REAL_GROUND_HEIGHT), Quaternion.identity);
+                if (Input.GetKey(KeyCode.W))
+                {
+                    Instantiate(wolfPrefab, new Vector2(mousePosition.x, Utils.REAL_GROUND_HEIGHT), Quaternion.identity);
+                }
+                else if (Input.GetKey(KeyCode.F))
+                {
+                    SpawnFish(mousePosition);
+                }
+                else if (Input.GetKey(KeyCode.R))
+                {
+                    SpawnArrow(mousePosition);
+                }
+                // GameObject arrowGameObject = Instantiate(arrowPrefab.gameObject, mousePosition, Quaternion.identity);
+                // arrowGameObject.GetComponent<Arrow>().SetTarget(mousePosition + Vector2.right, 3);
             }
+        }
+
+        private void SpawnArrow(Vector2 position)
+        {
+            GameObject arrowGameObject = Instantiate(arrowPrefab.gameObject, position, Quaternion.identity);
+            arrowGameObject.GetComponent<Arrow>().SetTarget(position + Vector2.right * (UnityEngine.Random.value > 0.5 ? -1 : 1) * UnityEngine.Random.Range(1, 5), 5);
         }
 
         public void SpawnFish(Vector2 position)
         {
             GameObject fish = Instantiate(fishPrefab.gameObject, position, Quaternion.identity);
             Destroy(fish, 30);
+        }
+
+        public Wolf[] FindWolfs()
+        {
+            return FindObjectsOfType<Wolf>();
         }
     }
 }

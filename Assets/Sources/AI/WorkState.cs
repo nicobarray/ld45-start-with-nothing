@@ -16,12 +16,14 @@ namespace LDJAM45
         bool taskDuration = false;
         float taskDurationTimer = 0;
         Action<bool> updateSprite;
+        Action<Vector2, Vector2> spawnArrow;
 
-        public WorkState(Transform myTransform, JobType job, Action<bool> updateSprite)
+        public WorkState(Transform myTransform, JobType job, Action<bool> updateSprite, Action<Vector2, Vector2> spawnArrow)
         {
             this.myTransform = myTransform;
             this.job = job;
             this.updateSprite = updateSprite;
+            this.spawnArrow = spawnArrow;
         }
 
         public override void Begin()
@@ -46,6 +48,12 @@ namespace LDJAM45
                 float offset = (UnityEngine.Random.value - 0.5f) * 2 * 2;
                 workPlace = new Vector2(GameManager.instance.boatCamp.position.x + offset, myTransform.position.y);
             }
+            else if (job == JobType.WARRIOR)
+            {
+                // ? Either stand at the left or the right hand-side of the camp.
+                float offset = Mathf.Sign(UnityEngine.Random.value - 0.5f) * 2 * 8;
+                workPlace = new Vector2(GameManager.instance.camp.position.x + offset, myTransform.position.y);
+            }
 
             destination = workPlace;
             origin = myTransform.position;
@@ -63,7 +71,7 @@ namespace LDJAM45
             updateSprite(false);
         }
 
-        private void Work()
+        private CrewState Work()
         {
             // ? Do the work.
             if (job == JobType.FISHERMAN)
@@ -74,8 +82,41 @@ namespace LDJAM45
             {
                 GameManager.instance.boatProgress += 0.1f;
             }
+            else if (job == JobType.WARRIOR)
+            {
+                // ? Search for in-range wolfs.
+                var wolfs = GameManager.instance.FindWolfs();
+
+                Wolf closestWolf = null;
+                foreach (var wolf in wolfs)
+                {
+                    if (closestWolf == null
+                        || Vector2.Distance(myTransform.position, wolf.transform.position) < Vector2.Distance(myTransform.position, closestWolf.transform.position))
+                    {
+                        closestWolf = wolf;
+                    }
+                }
+
+                // ? The warrior only fire an arrow if a wolf is in sight.
+                if (closestWolf != null)
+                {
+                    spawnArrow.Invoke(
+                        myTransform.position.Vec2()
+                            + Vector2.up
+                            + Vector2.right * Mathf.Sign(closestWolf.transform.position.x - myTransform.position.x),
+                        closestWolf.transform.position
+                    );
+                    return CrewState.WORK;
+                }
+                else
+                {
+                    return CrewState.IDLE;
+                }
+            }
 
             StartTask();
+
+            return CrewState.WORK;
         }
 
         private float GetJobDuration()
@@ -95,13 +136,13 @@ namespace LDJAM45
 
         public override CrewState Update()
         {
-            // ? The fisherman does its job.
+            // ? The crew mate does its job.
             if (taskDuration)
             {
                 taskDurationTimer += Time.deltaTime;
                 if (taskDurationTimer > GetJobDuration())
                 {
-                    Work();
+                    return Work();
                 }
 
                 return CrewState.WORK;
@@ -117,7 +158,6 @@ namespace LDJAM45
             {
                 t = 0;
                 StartTask();
-                return CrewState.WORK;
             }
 
             return CrewState.WORK;

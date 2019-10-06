@@ -29,6 +29,8 @@ namespace LDJAM45
         private bool isAlly = false;
         private Transform lastTargetAround;
 
+        public Arrow arrowPrefab;
+
         [Header("Assets")]
         public Sprite wandererSprite;
         public Sprite fishermanSprite;
@@ -85,6 +87,10 @@ namespace LDJAM45
                 {
                     spriteRenderer.sprite = wandererSprite;
                 }
+            }, (origin, destination) =>
+            {
+                GameObject arrowGameObject = Instantiate(arrowPrefab.gameObject, origin, Quaternion.identity);
+                arrowGameObject.GetComponent<Arrow>().SetTarget(destination, 5);
             });
             lastTargetAround = around;
         }

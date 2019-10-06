@@ -8,6 +8,7 @@ namespace LDJAM45
     {
         [Header("Components")]
         public Rigidbody2D rb;
+        public SpriteRenderer spriteRenderer;
 
         [Header("Player Configuration")]
         public float speed = 5;
@@ -22,6 +23,8 @@ namespace LDJAM45
             }
 
             float horizontalInput = Input.GetAxisRaw("Horizontal");
+
+            spriteRenderer.flipX = horizontalInput < 0;
 
             if (horizontalInput == 0)
             {
