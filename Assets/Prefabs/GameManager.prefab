@@ -48,11 +48,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   foodField: {fileID: 0}
+  generator: {fileID: 1304064438}
   fishPrefab: {fileID: 3636462709349972291, guid: e40a9a26434ae404ebfd8026b2d3cf7a,
     type: 3}
   wolfPrefab: {fileID: 4198248595603070130, guid: 78ebfc2dc07ac461bb5b261aaa8fbd85,
     type: 3}
   arrowPrefab: {fileID: -6294567521634339098, guid: d26a77fd53b30494db8c7f89df7c41a5,
+    type: 3}
+  wolfSpawn: {fileID: 663612885502315967, guid: 59092301ef7414ee99731a74f9e17773,
     type: 3}
   fishCount: 0
   boatProgress: 0
@@ -73,6 +76,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02a3c0a2b07a34a50b550a3aa2aef09d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  campSlabPrefab: {fileID: 2247224403025946237, guid: 1e67a43f60cb14a87a43da7d2965a094,
+    type: 3}
   beachPrefab: {fileID: 2247224403025946237, guid: 6b7e49e49278f4b75a84a119bb5720d2,
     type: 3}
   plainPrefab: {fileID: 2247224403025946237, guid: f9f511f5b1e5f4fc08f516b1b50f559e,

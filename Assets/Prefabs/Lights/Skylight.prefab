@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_LightVolumeOpacity: 0
-  m_ApplyToSortingLayers: a3508de3b9a408f100000000ebadfdebe3d1e99f
+  m_ApplyToSortingLayers: a3508de3b9a408f1fb0fe6f800000000ebadfdebfd8bec56e3d1e99f
   m_LightCookieSprite: {fileID: 0}
   m_UseNormalMap: 0
   m_LightOrder: 0
@@ -83,12 +83,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bec280b3517de43ad95a619258989bbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeSpeed: 5
+  timeSpeed: 1
+  period: 3
   dayIntensity: 0.95
-  dayLength: 1
+  dayLength: 6
   dayTint: {r: 1, g: 1, b: 1, a: 1}
   nightIntensity: 0.25
-  nightLength: 1
+  nightLength: 8
   nightTint: {r: 0.18039216, g: 0.16078432, b: 0.30588236, a: 1}
   clockField: {fileID: 0}
   sprite: {fileID: 21300000, guid: 9da5323d83eeb4655ab49c0d64ea7cb6, type: 3}

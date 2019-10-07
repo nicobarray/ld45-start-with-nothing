@@ -26,6 +26,8 @@ namespace LDJAM45
             this.job = job;
             this.updateSprite = updateSprite;
             this.spawnArrow = spawnArrow;
+
+            Begin();
         }
 
         public override void Begin()
@@ -43,7 +45,7 @@ namespace LDJAM45
 
                 fishingSpotX *= 5;
                 fishingSpotX += offset;
-                workPlace = new Vector2(fishingSpotX, myTransform.position.y);
+                workPlace = new Vector2(fishingSpotX, Utils.REAL_GROUND_HEIGHT);
             }
             else if (job == JobType.BUILDER)
             {
@@ -78,7 +80,10 @@ namespace LDJAM45
             // ? Do the work.
             if (job == JobType.FISHERMAN)
             {
-                GameManager.instance.SpawnFish(myTransform.position);
+                if (UnityEngine.Random.value > 0.5)
+                {
+                    GameManager.instance.SpawnFish(myTransform.position);
+                }
             }
             else if (job == JobType.BUILDER)
             {
@@ -125,7 +130,7 @@ namespace LDJAM45
         {
             if (job == JobType.FISHERMAN)
             {
-                return 30;
+                return 12;
             }
 
             if (job == JobType.BUILDER)
@@ -152,7 +157,7 @@ namespace LDJAM45
 
             // ? Go to his job.
             float deltaX = Vector2.Distance(origin, destination);
-            t += (Time.deltaTime / deltaX) * 5;
+            t += (Time.deltaTime / deltaX) * 2;
             myTransform.position = Vector2.Lerp(origin, destination, t);
 
             // ? Once the dude arrives at his job, work.

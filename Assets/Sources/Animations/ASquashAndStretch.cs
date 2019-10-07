@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LDJAM45
 {
-    public class PlayerAnimation : MonoBehaviour
+    public abstract class ASquashAndStretch : MonoBehaviour
     {
         bool reverse = false;
 
@@ -15,38 +15,25 @@ namespace LDJAM45
             public float reverseSpeed;
         }
 
-        public StateParamaters idleState;
-        public StateParamaters walkState;
-
         // ? Do not use. Needed for GetParams return value.
-        private StateParamaters defaultState = new StateParamaters
+        protected StateParamaters defaultState = new StateParamaters
         {
             target = Vector2.one,
             squashSpeed = 0,
             reverseSpeed = 0
         };
 
-        Vector3 defaultLocalScale;
+        public Vector3 defaultLocalScale = Vector3.one;
         float t = 0;
 
         Vector3 prevPosition;
 
-        void Start()
-        {
-            defaultLocalScale = Vector3.one;
-        }
-
-        StateParamaters GetParams()
-        {
-            bool isWalking = prevPosition != transform.position;
-            prevPosition = transform.position;
-
-            return isWalking ? walkState : idleState;
-        }
+        protected abstract StateParamaters GetParams(Vector3 prevPosition);
 
         void Update()
         {
-            StateParamaters param = GetParams();
+            StateParamaters param = GetParams(prevPosition);
+            prevPosition = transform.position;
 
             t += (reverse ? -param.reverseSpeed : param.squashSpeed) * Time.deltaTime;
 

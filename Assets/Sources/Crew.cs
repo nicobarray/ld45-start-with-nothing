@@ -26,7 +26,6 @@ namespace LDJAM45
         public JobType job = JobType.WANDERER;
         private State stateHandler;
 
-        private bool isAlly = false;
         private Transform lastTargetAround;
 
         public Arrow arrowPrefab;
@@ -44,6 +43,71 @@ namespace LDJAM45
         [Header("References")]
         public Transform jobMenu;
         public SpriteRenderer spriteRenderer;
+
+        void OnEnable()
+        {
+            GameManager.instance.onClickOutside.AddListener(Unselect);
+            jobMenu.gameObject.SetActive(false);
+            Pubsub.instance.On(EventName.PeriodUpdate, OnPeriodUpdate);
+        }
+
+        void OnDisable()
+        {
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.onClickOutside.RemoveListener(Unselect);
+            }
+
+            Pubsub.instance.Off(EventName.PeriodUpdate, OnPeriodUpdate);
+        }
+
+        void OnPeriodUpdate(object args)
+        {
+            DayPeriod period = (DayPeriod)args;
+
+            if (job != JobType.WANDERER)
+            {
+                if (period == DayPeriod.DAWN)
+                {
+                    if (GameManager.instance.fishCount > 0)
+                    {
+                        GameManager.instance.fishCount--;
+                    }
+                    else
+                    {
+                        Wander(GameManager.instance.crewCamps[UnityEngine.Random.Range(0, GameManager.instance.crewCamps.Count)]);
+                        return;
+                    }
+
+                    if (job == JobType.WARRIOR)
+                    {
+                        Idle(GameManager.instance.camp);
+                    }
+                    else
+                    {
+                        Work(GameManager.instance.camp);
+                    }
+                }
+                else if (period == DayPeriod.DUSK)
+                {
+                    if (job == JobType.WARRIOR)
+                    {
+                        Work(GameManager.instance.camp);
+                    }
+                    else
+                    {
+                        Idle(GameManager.instance.camp);
+                    }
+                }
+            }
+        }
+
+        public void Wander(Transform around)
+        {
+            job = JobType.WANDERER;
+            UpdateSprite(true, false);
+            Idle(around);
+        }
 
         public void Idle(Transform around)
         {
@@ -69,33 +133,35 @@ namespace LDJAM45
 
             // ? We want to force the Idle state here.
             state = CrewState.WORK;
-            stateHandler = new WorkState(transform, job, (end, flipX) =>
-            {
-                if (job == JobType.FISHERMAN)
-                {
-                    spriteRenderer.sprite = end ? fishermanSprite : fishermanWorkingSprite;
-                }
-                else if (job == JobType.BUILDER)
-                {
-                    spriteRenderer.sprite = end ? builderSprite : builderWorkingSprite;
-                }
-                else if (job == JobType.WARRIOR)
-                {
-                    spriteRenderer.sprite = end ? warriorSprite : warriorWorkingSprite;
-                }
-                else
-                {
-                    spriteRenderer.sprite = wandererSprite;
-                }
-
-                spriteRenderer.flipX = flipX;
-            }, (origin, destination) =>
+            stateHandler = new WorkState(transform, job, UpdateSprite, (origin, destination) =>
             {
                 GameObject arrowGameObject = Instantiate(arrowPrefab.gameObject, origin, Quaternion.identity);
                 arrowGameObject.GetComponent<Arrow>().SetTarget(destination, 25);
                 Destroy(arrowGameObject, 10);
             });
             lastTargetAround = around;
+        }
+
+        private void UpdateSprite(bool end, bool flipX)
+        {
+            if (job == JobType.FISHERMAN)
+            {
+                spriteRenderer.sprite = end ? fishermanSprite : fishermanWorkingSprite;
+            }
+            else if (job == JobType.BUILDER)
+            {
+                spriteRenderer.sprite = end ? builderSprite : builderWorkingSprite;
+            }
+            else if (job == JobType.WARRIOR)
+            {
+                spriteRenderer.sprite = end ? warriorSprite : warriorWorkingSprite;
+            }
+            else
+            {
+                spriteRenderer.sprite = wandererSprite;
+            }
+
+            spriteRenderer.flipX = flipX;
         }
 
         public void RecruitBuilder()
@@ -131,22 +197,17 @@ namespace LDJAM45
 
             Unselect();
 
-            Idle(GameManager.instance.camp);
-            return true;
-        }
-
-        void OnEnable()
-        {
-            GameManager.instance.onClickOutside.AddListener(Unselect);
-            jobMenu.gameObject.SetActive(false);
-        }
-
-        void OnDisable()
-        {
-            if (GameManager.instance != null)
+            if (job == JobType.WARRIOR && GameManager.instance.period == DayPeriod.NIGHT
+                || job != JobType.WARRIOR && GameManager.instance.period != DayPeriod.NIGHT)
             {
-                GameManager.instance.onClickOutside.RemoveListener(Unselect);
+                Work(GameManager.instance.camp);
             }
+            else
+            {
+                Idle(GameManager.instance.camp);
+            }
+
+            return true;
         }
 
         public void Select()
@@ -168,10 +229,7 @@ namespace LDJAM45
             prevState = state;
             state = CrewState.SELECTED;
 
-            if (!isAlly)
-            {
-                jobMenu.gameObject.SetActive(true);
-            }
+            jobMenu.gameObject.SetActive(true);
         }
 
         public void Unselect()
@@ -188,7 +246,6 @@ namespace LDJAM45
 
         void Update()
         {
-
             if (state == CrewState.CREATED)
             {
                 return;
@@ -197,8 +254,10 @@ namespace LDJAM45
             if (state == CrewState.SELECTED)
             {
                 UpdateSelected();
+                return;
             }
-            else if (state == CrewState.IDLE || state == CrewState.WORK)
+
+            if (state == CrewState.IDLE || state == CrewState.WORK)
             {
                 CrewState nextState = stateHandler.Update();
 

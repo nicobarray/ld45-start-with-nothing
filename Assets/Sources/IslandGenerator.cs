@@ -4,17 +4,10 @@ using UnityEngine;
 
 namespace LDJAM45
 {
-    enum IslandSlab
-    {
-        BEACH,
-        PLAIN,
-        FOREST,
-        CAMP
-    }
-
     public class IslandGenerator : MonoBehaviour
     {
         [Header("Prefabs")]
+        public GameObject campSlabPrefab;
         public GameObject beachPrefab;
         public GameObject plainPrefab;
         public GameObject forestPrefab;
@@ -25,24 +18,13 @@ namespace LDJAM45
         public GameObject crewPrefab;
         public GameObject boatConstructionSitePrefab;
 
-        [Header("Generator knobs")]
-        int islandSize = 24;
-
         [Header("References")]
         public Transform slabParent;
         public Transform islandObjectsParent;
 
-        private struct Slab
+        public Slab[] Generate(int islandSize)
         {
-            public GameObject prefab;
-            public IslandSlab type;
-        }
-
-        private Slab[] islandSlabs;
-
-        void Start()
-        {
-            islandSlabs = new Slab[islandSize];
+            Slab[] islandSlabs = new Slab[islandSize];
 
             for (int i = 0; i < islandSlabs.Length; ++i)
             {
@@ -51,7 +33,7 @@ namespace LDJAM45
                 if (i == islandSlabs.Length / 2)
                 {
                     type = IslandSlab.CAMP;
-                    slabPrefab = plainPrefab;
+                    slabPrefab = campSlabPrefab;
                 }
                 else if (i == 0 || i == islandSlabs.Length - 1)
                 {
@@ -77,6 +59,8 @@ namespace LDJAM45
                 slabGameObject.name = "Slab_" + i + "_" + islandSlabs[i].type.ToString();
                 // ? Each slab is 20 unit of width.
                 slabGameObject.transform.position = new Vector3((i - islandSlabs.Length / 2) * 20, 0);
+
+                islandSlabs[i].transform = slabGameObject.transform;
 
                 if (i == 0)
                 {
@@ -104,6 +88,8 @@ namespace LDJAM45
                     GameObject boatCampGameObject = Instantiate(boatConstructionSitePrefab, islandObjectsParent.transform);
                     boatCampGameObject.transform.position = new Vector2(slabGameObject.transform.position.Vec2().x + 10, 0);
                     GameManager.instance.boatCamp = boatCampGameObject.transform;
+
+                    SpawnWanderer(campGameObject.transform);
                 }
 
                 if (islandSlabs[i].type != IslandSlab.CAMP)
@@ -121,17 +107,28 @@ namespace LDJAM45
                             campGameObject.transform.position = slabGameObject.transform.position.Vec2() + Vector2.up * 2.18f;
                             GameManager.instance.crewCamps.Add(campGameObject.transform);
 
-                            int crewMembersCount = UnityEngine.Random.Range(1, 3);
+                            islandSlabs[i].camp = campGameObject.transform;
+
+                            int crewMembersCount = UnityEngine.Random.Range(1, 4);
                             for (int c = 0; c < crewMembersCount; c++)
                             {
-                                GameObject crewMember = Instantiate(crewPrefab, islandObjectsParent.transform);
-                                crewMember.transform.position = slabGameObject.transform.position.Vec2() + Vector2.up * Utils.REAL_GROUND_HEIGHT + Vector2.right * (UnityEngine.Random.value - 0.5f) * 2 * 3;
-                                crewMember.GetComponent<Crew>().Idle(campGameObject.transform);
+                                SpawnWanderer(campGameObject.transform);
                             }
                         }
                     }
                 }
             }
+
+            return islandSlabs;
+        }
+
+        private void SpawnWanderer(Transform around)
+        {
+            GameObject crewMember = Instantiate(crewPrefab, islandObjectsParent.transform);
+            crewMember.transform.position = Vector2.up * Utils.REAL_GROUND_HEIGHT
+                                            + Vector2.right * around.position.Vec2().x
+                                            + Vector2.right * (UnityEngine.Random.value - 0.5f) * 2 * 3;
+            crewMember.GetComponent<Crew>().Idle(around);
         }
     }
 }

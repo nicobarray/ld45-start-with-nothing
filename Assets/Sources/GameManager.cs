@@ -5,6 +5,22 @@ using UnityEngine.EventSystems;
 
 namespace LDJAM45
 {
+    public enum IslandSlab
+    {
+        BEACH,
+        PLAIN,
+        FOREST,
+        CAMP
+    }
+
+    public struct Slab
+    {
+        public GameObject prefab;
+        public IslandSlab type;
+        public Transform transform;
+        public Transform camp;
+    }
+
     public class GameManager : MonoBehaviour
     {
         public static GameManager instance;
@@ -17,24 +33,52 @@ namespace LDJAM45
             }
 
             instance = this;
+
+            Pubsub.instance.On(EventName.PeriodUpdate, OnTimePeriodUpdate);
         }
 
         void OnDisable()
         {
             instance = null;
+            Pubsub.instance.Off(EventName.PeriodUpdate, OnTimePeriodUpdate);
         }
 
+        void OnTimePeriodUpdate(object args)
+        {
+            DayPeriod period = (DayPeriod)args;
+            this.period = period;
+
+            Debug.Log("Period changes " + period);
+
+            if (period == DayPeriod.DAWN)
+            {
+                dayCount++;
+                int x = dayCount < 2 ? 0 : dayCount - 2;
+                SpawnManyWolfs(x * x);
+            }
+        }
+
+        private int dayCount = 1;
+        private Slab[] map;
+
+        [Header("References")]
         public UnityEvent onClickOutside;
         public TMPro.TextMeshProUGUI foodField;
+        public IslandGenerator generator;
 
         [Header("Prefabs")]
         public Fish fishPrefab;
         public Wolf wolfPrefab;
         public Arrow arrowPrefab;
+        public WolfSpawn wolfSpawn;
+
+        [Header("Gameplay")]
+        public int islandSize = 12;
 
         [Header("Game State - Do not set in editor")]
         public int fishCount = 0;
         public float boatProgress = 0;
+        public DayPeriod period = DayPeriod.DAWN;
         public Transform camp;
         public Transform boatCamp;
         public List<Transform> crewCamps = new List<Transform>();
@@ -43,6 +87,9 @@ namespace LDJAM45
 
         void Start()
         {
+            map = generator.Generate(islandSize);
+
+            // TODO: implement the cat.
             Instantiate(fishPrefab.gameObject, new Vector2(0, 5), Quaternion.identity);
         }
 
@@ -93,8 +140,26 @@ namespace LDJAM45
                 {
                     SpawnArrow(mousePosition);
                 }
-                // GameObject arrowGameObject = Instantiate(arrowPrefab.gameObject, mousePosition, Quaternion.identity);
-                // arrowGameObject.GetComponent<Arrow>().SetTarget(mousePosition + Vector2.right, 3);
+            }
+        }
+
+        private void SpawnManyWolfs(int population)
+        {
+            foreach (var slab in map)
+            {
+                if (slab.type == IslandSlab.FOREST && slab.camp == null)
+                {
+                    for (int i = 0; i < UnityEngine.Random.Range(1, 5); i++)
+                    {
+                        population--;
+                        Instantiate(wolfSpawn, new Vector2(slab.transform.position.x + UnityEngine.Random.insideUnitCircle.x * 5, Utils.REAL_GROUND_HEIGHT), Quaternion.identity);
+
+                        if (population <= 0)
+                        {
+                            return;
+                        }
+                    }
+                }
             }
         }
 

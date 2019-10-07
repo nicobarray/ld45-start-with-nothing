@@ -4,8 +4,6 @@ namespace LDJAM45
 {
     public class CurveDebugger : MonoBehaviour
     {
-        float x = 0;
-        float v = 0;
         float t = 0;
 
         Vector2 origin;
