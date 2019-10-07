@@ -28,14 +28,28 @@ namespace LDJAM45
         public int nightLength = 1;
         public Color nightTint;
 
-        public TMPro.TextMeshProUGUI clockField;
         public Sprite sprite;
         public Light2D skylight;
+        public Transform planetAnchor;
 
         void Update()
         {
             time += Time.deltaTime * timeSpeed;
 
+            UpdateLight();
+            UpdateSpaceObjects();
+        }
+
+        void UpdateSpaceObjects()
+        {
+            Quaternion day = Quaternion.Euler(0, 0, 90);
+            Quaternion night = Quaternion.Euler(0, 0, -90);
+
+            planetAnchor.rotation = Quaternion.Lerp(night, day, relativeTime);
+        }
+
+        void UpdateLight()
+        {
             relativeTime = time;
 
             float dayBegins = Mathf.PI / 2;
@@ -81,6 +95,7 @@ namespace LDJAM45
 
             skylight.intensity = Mathf.LerpAngle(nightIntensity, dayIntensity, relativeTime);
             skylight.color = Color.Lerp(nightTint, dayTint, relativeTime);
+
         }
     }
 }

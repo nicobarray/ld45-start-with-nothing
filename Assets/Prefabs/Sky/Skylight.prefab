@@ -91,6 +91,6 @@ MonoBehaviour:
   nightIntensity: 0.25
   nightLength: 8
   nightTint: {r: 0.18039216, g: 0.16078432, b: 0.30588236, a: 1}
-  clockField: {fileID: 0}
   sprite: {fileID: 21300000, guid: 9da5323d83eeb4655ab49c0d64ea7cb6, type: 3}
   skylight: {fileID: 5802742261229291389}
+  planetAnchor: {fileID: 0}
