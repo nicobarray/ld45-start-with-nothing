@@ -225,6 +225,10 @@ namespace LDJAM45
             {
                 Speak(onRecruitBuilder, false);
             }
+            else
+            {
+                Speak(onStarve, false);
+            }
         }
 
         public void RecruitWarrior()
@@ -233,6 +237,10 @@ namespace LDJAM45
             {
                 Speak(onRecruitHunter, false);
             }
+            else
+            {
+                Speak(onStarve, false);
+            }
         }
 
         public void RecruitFisherman()
@@ -240,6 +248,10 @@ namespace LDJAM45
             if (Recruit(JobType.FISHERMAN))
             {
                 Speak(onRecruitFisherman, false);
+            }
+            else
+            {
+                Speak(onStarve, false);
             }
         }
 
@@ -262,7 +274,7 @@ namespace LDJAM45
             Unselect();
 
             if (job == JobType.WARRIOR && GameManager.instance.period == DayPeriod.NIGHT
-                || job != JobType.WARRIOR && GameManager.instance.period != DayPeriod.NIGHT)
+                || job != JobType.WARRIOR && GameManager.instance.period == DayPeriod.DAY)
             {
                 Work(GameManager.instance.camp);
             }
@@ -335,8 +347,6 @@ namespace LDJAM45
 
                 if (nextState != state)
                 {
-                    Debug.Log(state + " -> " + nextState);
-
                     prevState = state;
                     state = nextState;
                     stateHandler.End();

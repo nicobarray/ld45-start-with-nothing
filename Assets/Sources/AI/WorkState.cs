@@ -34,18 +34,8 @@ namespace LDJAM45
         {
             if (job == JobType.FISHERMAN)
             {
-                float fishingSpotX = 0;
-                float offset = (UnityEngine.Random.value - 0.5f) * 2 * 4;
-
-                fishingSpotX = 1;
-                if (UnityEngine.Random.value > 0.5)
-                {
-                    fishingSpotX = -1;
-                }
-
-                fishingSpotX *= 5;
-                fishingSpotX += offset;
-                workPlace = new Vector2(fishingSpotX, Utils.REAL_GROUND_HEIGHT);
+                float offset = Mathf.Sign(UnityEngine.Random.value - 0.5f) * 2 * 10 + UnityEngine.Random.insideUnitCircle.x * 3;
+                workPlace = new Vector2(GameManager.instance.camp.position.x + offset, myTransform.position.y);
             }
             else if (job == JobType.BUILDER)
             {
@@ -87,7 +77,7 @@ namespace LDJAM45
             }
             else if (job == JobType.BUILDER)
             {
-                GameManager.instance.boatProgress += 5f;
+                GameManager.instance.boatProgress += 0.005f;
             }
             else if (job == JobType.WARRIOR)
             {
@@ -105,7 +95,7 @@ namespace LDJAM45
                 }
 
                 // ? The warrior only fire an arrow if a wolf is in sight.
-                if (closestWolf != null && Vector2.Distance(closestWolf.transform.position, myTransform.position) < 10)
+                if (closestWolf != null && Vector2.Distance(closestWolf.transform.position, myTransform.position) < 20)
                 {
                     updateSprite(false, workPlace.x - closestWolf.transform.position.x > 0 ? false : true);
                     spawnArrow.Invoke(
@@ -126,20 +116,23 @@ namespace LDJAM45
             return CrewState.WORK;
         }
 
-        private float GetJobDuration()
-        {
-            if (job == JobType.FISHERMAN)
-            {
-                return 12;
-            }
+        // private float GetJobDuration()
+        // {
 
-            if (job == JobType.BUILDER)
-            {
-                return 3;
-            }
+        //     return 3;
 
-            return 3;
-        }
+        //     if (job == JobType.FISHERMAN)
+        //     {
+        //         return 6;
+        //     }
+
+        //     if (job == JobType.BUILDER)
+        //     {
+        //         return 3;
+        //     }
+
+        //     return 3;
+        // }
 
         public override CrewState Update()
         {
@@ -147,7 +140,7 @@ namespace LDJAM45
             if (taskDuration)
             {
                 taskDurationTimer += Time.deltaTime;
-                if (taskDurationTimer > GetJobDuration())
+                if (taskDurationTimer > 3)//GetJobDuration())
                 {
                     return Work();
                 }

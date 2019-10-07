@@ -43,7 +43,7 @@ namespace LDJAM45
 
             if (transform.position.y < Utils.REAL_GROUND_HEIGHT)
             {
-                Destroy(this);
+                Destroy(gameObject);
             }
         }
     }

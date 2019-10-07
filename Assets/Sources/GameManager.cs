@@ -56,7 +56,16 @@ namespace LDJAM45
 
                 if (dayCount > 1)
                 {
-                    SpawnManyWolfs(fishCount * fishCount);
+                    SpawnManyWolfs(fishCount + UnityEngine.Random.Range(0, dayCount));
+                }
+
+                foreach (var slab in map)
+                {
+                    if (slab.type == IslandSlab.BEACH)
+                    {
+                        float left = slab.transform.position.x < camp.position.x ? 3 : -3;
+                        SpawnFish(slab.transform.position.Vec2() + Vector2.up * left);
+                    }
                 }
             }
             else if (period == DayPeriod.DUSK)
@@ -117,7 +126,7 @@ namespace LDJAM45
             Instantiate(fishPrefab.gameObject, new Vector2(0, 5), Quaternion.identity);
         }
 
-        string konamiCode = "bakablue";
+        string konamiCode = "baka";
         bool victory = false;
 
         void Update()
@@ -137,6 +146,18 @@ namespace LDJAM45
             if (EventSystem.current.IsPointerOverGameObject())
             {
                 clickOutside = false;
+            }
+
+            if (konamiCode != null)
+            {
+                CodeKey(KeyCode.B, "b");
+                CodeKey(KeyCode.A, "a");
+                CodeKey(KeyCode.K, "k");
+
+                if (konamiCode.Length <= 0)
+                {
+                    konamiCode = null;
+                }
             }
 
             if (Input.GetMouseButtonDown(0))
@@ -162,15 +183,7 @@ namespace LDJAM45
                     onClickOutside.Invoke();
                 }
 
-                if (konamiCode.Length > 1)
-                {
-                    string code = Input.inputString;
-                    if (konamiCode.StartsWith(code))
-                    {
-                        konamiCode = konamiCode.Substring(1);
-                    }
-                }
-                else
+                if (konamiCode == null)
                 {
                     if (Input.GetKey(KeyCode.W))
                     {
@@ -195,17 +208,18 @@ namespace LDJAM45
             {
                 foreach (var slab in map)
                 {
-                    if (slab.type == IslandSlab.FOREST && slab.camp == null)
+                    if (slab.type == IslandSlab.FOREST && slab.camp == null && Vector2.Distance(slab.transform.position, camp.position) > 15)
                     {
                         for (int i = 0; i < UnityEngine.Random.Range(1, 5); i++)
                         {
-                            population--;
-                            Instantiate(wolfSpawn, new Vector2(slab.transform.position.x + UnityEngine.Random.insideUnitCircle.x * 5, Utils.REAL_GROUND_HEIGHT), Quaternion.identity);
-
                             if (population <= 0)
                             {
                                 return;
                             }
+
+                            population--;
+                            Instantiate(wolfSpawn, new Vector2(slab.transform.position.x + UnityEngine.Random.insideUnitCircle.x * 5, Utils.REAL_GROUND_HEIGHT), Quaternion.identity);
+
                         }
                     }
                 }
@@ -223,12 +237,19 @@ namespace LDJAM45
         public void SpawnFish(Vector2 position)
         {
             GameObject fish = Instantiate(fishPrefab.gameObject, position, Quaternion.identity);
-            Destroy(fish, 30);
         }
 
         public Wolf[] FindWolfs()
         {
             return FindObjectsOfType<Wolf>();
+        }
+
+        private void CodeKey(KeyCode code, string letter)
+        {
+            if (Input.GetKeyDown(code) && konamiCode.StartsWith(letter))
+            {
+                konamiCode = konamiCode.Substring(1);
+            }
         }
     }
 }

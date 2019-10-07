@@ -22,10 +22,6 @@ namespace LDJAM45
             {
                 events[eventName](args);
             }
-            else
-            {
-                Debug.Log("No listener found for " + eventName);
-            }
         }
 
         public void On(EventName eventName, Action<object> callback)

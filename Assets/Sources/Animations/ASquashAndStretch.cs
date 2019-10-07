@@ -39,7 +39,7 @@ namespace LDJAM45
 
             Vector2 target = param.target;
 
-            transform.localScale = Vector3.Lerp(defaultLocalScale, target, t);
+            transform.localScale = Vector2.Lerp(defaultLocalScale, target, t);
 
             if (reverse && t < 0)
             {

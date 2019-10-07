@@ -40,7 +40,7 @@ namespace LDJAM45
                     type = IslandSlab.BEACH;
                     slabPrefab = beachPrefab;
                 }
-                else if (UnityEngine.Random.value < 0.5)
+                else if (UnityEngine.Random.value < 0.5 && i != islandSize / 2 - 1 && i != islandSize / 2 + 1)
                 {
                     type = IslandSlab.FOREST;
                     slabPrefab = forestPrefab;

@@ -21,7 +21,7 @@ namespace LDJAM45
         void Update()
         {
             float progress = GameManager.instance.boatProgress;
-            progressField.text = progress.ToString().Substring(0, Mathf.Min(progress.ToString().Length, 3)) + "%";
+            progressField.text = progress.ToString().Substring(0, Mathf.Min(progress.ToString().Length, 4)) + "%";
 
             if (GameManager.instance.boatProgress >= 100)
             {
