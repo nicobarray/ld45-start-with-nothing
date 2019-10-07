@@ -317,6 +317,12 @@ Transform:
   m_Father: {fileID: 1297227184}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!224 &375946138 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 724969639426909910, guid: 3c3a924fefa03413caebc4ffb9c7ea45,
+    type: 3}
+  m_PrefabInstance: {fileID: 4167112048477879310}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &381039133
 GameObject:
   m_ObjectHideFlags: 0
@@ -1342,6 +1348,31 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 289820751930181703, guid: 3c3a924fefa03413caebc4ffb9c7ea45,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6632123409696617772, guid: 3c3a924fefa03413caebc4ffb9c7ea45,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6632123409696617772, guid: 3c3a924fefa03413caebc4ffb9c7ea45,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6632123409696617772, guid: 3c3a924fefa03413caebc4ffb9c7ea45,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6632123409696617772, guid: 3c3a924fefa03413caebc4ffb9c7ea45,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c3a924fefa03413caebc4ffb9c7ea45, type: 3}
 --- !u!1001 &5750587618433640084
@@ -1361,6 +1392,17 @@ PrefabInstance:
       propertyPath: foodField
       value: 
       objectReference: {fileID: 2143985337}
+    - target: {fileID: 6274795226596930267, guid: 0eba08d8f3f594ed799deb2e18ef23b3,
+        type: 3}
+      propertyPath: notifParent
+      value: 
+      objectReference: {fileID: 375946138}
+    - target: {fileID: 6274795226596930267, guid: 0eba08d8f3f594ed799deb2e18ef23b3,
+        type: 3}
+      propertyPath: notifPrefab
+      value: 
+      objectReference: {fileID: 3527834056427770712, guid: 1b9a88f13e5c647a3b89c02346b8f67d,
+        type: 3}
     - target: {fileID: 2834304142414352876, guid: 0eba08d8f3f594ed799deb2e18ef23b3,
         type: 3}
       propertyPath: m_LocalPosition.x

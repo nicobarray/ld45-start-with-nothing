@@ -17,11 +17,6 @@ namespace LDJAM45
         {
             float boost = 1;
 
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                boost = 10;
-            }
-
             float horizontalInput = Input.GetAxisRaw("Horizontal");
 
             spriteRenderer.flipX = horizontalInput < 0;

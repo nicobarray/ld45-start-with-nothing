@@ -124,7 +124,7 @@ namespace LDJAM45
                 {
                     if (GameManager.instance.fishCount > 0)
                     {
-                        GameManager.instance.fishCount--;
+                        GameManager.instance.RemoveFish();
                         Speak(onBreakfast, true);
                     }
                     else
@@ -255,7 +255,7 @@ namespace LDJAM45
                 return false;
             }
 
-            GameManager.instance.fishCount--;
+            GameManager.instance.RemoveFish();
             this.job = job;
             spriteRenderer.sprite = GetSprite();
 

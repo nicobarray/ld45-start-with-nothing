@@ -50,8 +50,6 @@ namespace LDJAM45
             DayPeriod period = (DayPeriod)args;
             this.period = period;
 
-            Debug.Log("Period changes " + period);
-
             if (period == DayPeriod.DAWN)
             {
                 dayCount++;
@@ -73,6 +71,12 @@ namespace LDJAM45
             }
         }
 
+        public void RemoveFish()
+        {
+            var go = Instantiate(notifPrefab, notifParent);
+            fishCount--;
+        }
+
         private int dayCount = 1;
         private Slab[] map;
 
@@ -81,12 +85,14 @@ namespace LDJAM45
         public TMPro.TextMeshProUGUI foodField;
         public IslandGenerator generator;
         public AudioSource speaker;
+        public Transform notifParent;
 
         [Header("Prefabs")]
         public Fish fishPrefab;
         public Wolf wolfPrefab;
         public Arrow arrowPrefab;
         public WolfSpawn wolfSpawn;
+        public GameObject notifPrefab;
 
         public AudioClip wolfComing;
 
@@ -111,9 +117,12 @@ namespace LDJAM45
             Instantiate(fishPrefab.gameObject, new Vector2(0, 5), Quaternion.identity);
         }
 
+        string konamiCode = "bakablue";
+        bool victory = false;
+
         void Update()
         {
-            bool victory = false;
+
             if (!victory && boatProgress >= 100)
             {
                 victory = true;
@@ -153,18 +162,28 @@ namespace LDJAM45
                     onClickOutside.Invoke();
                 }
 
-                // ? Uncomment to spawn fish for debug.
-                if (Input.GetKey(KeyCode.W))
+                if (konamiCode.Length > 1)
                 {
-                    Instantiate(wolfPrefab, new Vector2(mousePosition.x, Utils.REAL_GROUND_HEIGHT), Quaternion.identity);
+                    string code = Input.inputString;
+                    if (konamiCode.StartsWith(code))
+                    {
+                        konamiCode = konamiCode.Substring(1);
+                    }
                 }
-                else if (Input.GetKey(KeyCode.F))
+                else
                 {
-                    SpawnFish(mousePosition);
-                }
-                else if (Input.GetKey(KeyCode.R))
-                {
-                    SpawnArrow(mousePosition);
+                    if (Input.GetKey(KeyCode.W))
+                    {
+                        Instantiate(wolfPrefab, new Vector2(mousePosition.x, Utils.REAL_GROUND_HEIGHT), Quaternion.identity);
+                    }
+                    else if (Input.GetKey(KeyCode.F))
+                    {
+                        SpawnFish(mousePosition);
+                    }
+                    else if (Input.GetKey(KeyCode.R))
+                    {
+                        SpawnArrow(mousePosition);
+                    }
                 }
             }
         }

@@ -67,7 +67,7 @@ namespace LDJAM45
             {
                 if (GameManager.instance.fishCount > 0)
                 {
-                    GameManager.instance.fishCount--;
+                    GameManager.instance.RemoveFish();
                 }
 
                 Destroy(gameObject);
