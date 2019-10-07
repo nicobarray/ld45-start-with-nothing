@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace LDJAM45
@@ -11,5 +13,12 @@ namespace LDJAM45
         {
             return vector;
         }
+
+        public static IEnumerator Delay(float seconds, Action callback)
+        {
+            yield return new WaitForSeconds(seconds);
+            callback();
+        }
+
     }
 }

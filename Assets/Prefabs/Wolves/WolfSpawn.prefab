@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 305485946231855190}
   - component: {fileID: 811325914578709194}
   - component: {fileID: 663612885502315967}
+  - component: {fileID: 3272395627371755063}
   m_Layer: 0
   m_Name: WolfSpawn
   m_TagString: Untagged
@@ -95,3 +96,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wolfPrefab: {fileID: 3237167274412732162, guid: 78ebfc2dc07ac461bb5b261aaa8fbd85,
     type: 3}
+--- !u!114 &3272395627371755063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693525365465480585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc7b076237f5a48eca85db2cebc01197, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultLocalScale: {x: 1, y: 1, z: 1}
+  idleState:
+    target: {x: 1.2, y: 0.9}
+    squashSpeed: 0.5
+    reverseSpeed: 0.25

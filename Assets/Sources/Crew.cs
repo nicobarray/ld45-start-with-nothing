@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 namespace LDJAM45
@@ -40,9 +42,17 @@ namespace LDJAM45
         public Sprite builderWorkingSprite;
         public Sprite warriorWorkingSprite;
 
+        public AudioClip[] onClickAudio;
+        public AudioClip onRecruitFisherman;
+        public AudioClip onRecruitBuilder;
+        public AudioClip onRecruitHunter;
+        public AudioClip[] onBreakfast;
+        public AudioClip[] onStarve;
+
         [Header("References")]
         public Transform jobMenu;
         public SpriteRenderer spriteRenderer;
+        public AudioSource speaker;
 
         void OnEnable()
         {
@@ -61,6 +71,49 @@ namespace LDJAM45
             Pubsub.instance.Off(EventName.PeriodUpdate, OnPeriodUpdate);
         }
 
+        IEnumerator DelaySpeak(float seconds, Action callback)
+        {
+            float realDelay = UnityEngine.Random.value * seconds;
+            yield return new WaitForSeconds(realDelay);
+            callback();
+        }
+
+        void Speak(AudioClip clip, bool delay)
+        {
+            if (delay)
+            {
+                StartCoroutine(DelaySpeak(1, () =>
+                          {
+                              speaker.clip = clip;
+                              speaker.Play();
+                          }));
+            }
+            else
+            {
+                speaker.clip = clip;
+                speaker.Play();
+            }
+
+        }
+
+        void Speak(AudioClip[] clips, bool delay)
+        {
+            if (delay)
+            {
+                StartCoroutine(DelaySpeak(1, () =>
+                          {
+                              speaker.clip = clips[UnityEngine.Random.Range(0, clips.Length)];
+                              speaker.Play();
+                          }));
+            }
+            else
+            {
+                speaker.clip = clips[UnityEngine.Random.Range(0, clips.Length)];
+                speaker.Play();
+            }
+
+        }
+
         void OnPeriodUpdate(object args)
         {
             DayPeriod period = (DayPeriod)args;
@@ -72,10 +125,12 @@ namespace LDJAM45
                     if (GameManager.instance.fishCount > 0)
                     {
                         GameManager.instance.fishCount--;
+                        Speak(onBreakfast, true);
                     }
                     else
                     {
                         Wander(GameManager.instance.crewCamps[UnityEngine.Random.Range(0, GameManager.instance.crewCamps.Count)]);
+                        Speak(onStarve, true);
                         return;
                     }
 
@@ -166,17 +221,26 @@ namespace LDJAM45
 
         public void RecruitBuilder()
         {
-            Recruit(JobType.BUILDER);
+            if (Recruit(JobType.BUILDER))
+            {
+                Speak(onRecruitBuilder, false);
+            }
         }
 
         public void RecruitWarrior()
         {
-            Recruit(JobType.WARRIOR);
+            if (Recruit(JobType.WARRIOR))
+            {
+                Speak(onRecruitHunter, false);
+            }
         }
 
         public void RecruitFisherman()
         {
-            Recruit(JobType.FISHERMAN);
+            if (Recruit(JobType.FISHERMAN))
+            {
+                Speak(onRecruitFisherman, false);
+            }
         }
 
         public bool Recruit(JobType job)
@@ -230,6 +294,8 @@ namespace LDJAM45
             state = CrewState.SELECTED;
 
             jobMenu.gameObject.SetActive(true);
+
+            Speak(onClickAudio, false);
         }
 
         public void Unselect()

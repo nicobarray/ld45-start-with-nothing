@@ -1,7 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 namespace LDJAM45
 {
@@ -54,7 +56,13 @@ namespace LDJAM45
             {
                 dayCount++;
                 int x = dayCount < 2 ? 0 : dayCount - 2;
-                SpawnManyWolfs(x * x);
+
+                if (x > 0)
+                {
+                    speaker.clip = wolfComing;
+                    speaker.Play();
+                    SpawnManyWolfs(x * x);
+                }
             }
         }
 
@@ -65,12 +73,15 @@ namespace LDJAM45
         public UnityEvent onClickOutside;
         public TMPro.TextMeshProUGUI foodField;
         public IslandGenerator generator;
+        public AudioSource speaker;
 
         [Header("Prefabs")]
         public Fish fishPrefab;
         public Wolf wolfPrefab;
         public Arrow arrowPrefab;
         public WolfSpawn wolfSpawn;
+
+        public AudioClip wolfComing;
 
         [Header("Gameplay")]
         public int islandSize = 12;
@@ -95,6 +106,13 @@ namespace LDJAM45
 
         void Update()
         {
+            bool victory = false;
+            if (!victory && boatProgress >= 100)
+            {
+                SceneManager.LoadScene("VictoryScene");
+                victory = true;
+            }
+
             foodField.text = "x " + fishCount;
 
             bool clickOutside = true;

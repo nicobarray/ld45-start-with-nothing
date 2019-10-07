@@ -17,7 +17,6 @@ namespace LDJAM45
         public float groundHeight = 2;
         public float jumpHeight = 3;
 
-
         void Start()
         {
             origin = transform.position;
@@ -26,7 +25,7 @@ namespace LDJAM45
 
             if ((destination - origin).x < 0)
             {
-                GetComponent<SpriteRenderer>().flipX = true;
+                transform.localScale = new Vector2(-1, 1);
             }
         }
 
@@ -61,7 +60,6 @@ namespace LDJAM45
 
         void Update()
         {
-
             transform.position = new Vector2(GetX(), GetY());
             transform.rotation = Quaternion.Euler(0, 0, 20 + Mathf.LerpAngle(320, 20, jumpVelocity));
 

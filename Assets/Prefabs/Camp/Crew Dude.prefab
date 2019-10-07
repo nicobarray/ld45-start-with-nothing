@@ -498,6 +498,7 @@ GameObject:
   - component: {fileID: 3847527320514715791}
   - component: {fileID: 3847527320514715827}
   - component: {fileID: 5149695382296572391}
+  - component: {fileID: 3357382146012316028}
   m_Layer: 0
   m_Name: Crew Dude
   m_TagString: Untagged
@@ -512,7 +513,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3847527320514715790}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 5.08, y: 2.52, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -643,8 +644,23 @@ MonoBehaviour:
     type: 3}
   warriorWorkingSprite: {fileID: 21300000, guid: 16f1fcb5106444e368769725129743a0,
     type: 3}
+  onClickAudio:
+  - {fileID: 8300000, guid: 597e5947e0039479bba67efc13965997, type: 3}
+  - {fileID: 8300000, guid: c8a837d2f4a844c4198067f742a01095, type: 3}
+  - {fileID: 8300000, guid: 7a67f6c209c7549af9b39f805f59c5f7, type: 3}
+  onRecruitFisherman: {fileID: 8300000, guid: 0261c198dae284991ac3e2388a04388d, type: 3}
+  onRecruitBuilder: {fileID: 8300000, guid: a9a81118f1fdd434bbac60f75e08b0da, type: 3}
+  onRecruitHunter: {fileID: 8300000, guid: 556c8c05be40044619dcdcd4dce9d92c, type: 3}
+  onBreakfast:
+  - {fileID: 8300000, guid: 597ea167627b9469eacd45eb2c65a843, type: 3}
+  - {fileID: 8300000, guid: 88487802ecde8474197c2a265c9e2982, type: 3}
+  - {fileID: 8300000, guid: 99b941b249710418288267ad93c6202b, type: 3}
+  onStarve:
+  - {fileID: 8300000, guid: a7bf974a3d87b45bfa47a5f6e3a697f7, type: 3}
+  - {fileID: 8300000, guid: a8558489e5f47466685aad09ba5b4e6e, type: 3}
   jobMenu: {fileID: 3132036509820275115}
   spriteRenderer: {fileID: 3847527320514715825}
+  speaker: {fileID: 3357382146012316028}
 --- !u!114 &5149695382296572391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -670,6 +686,102 @@ MonoBehaviour:
     target: {x: 1.1, y: 0.9}
     squashSpeed: 3
     reverseSpeed: 1.5
+--- !u!82 &3357382146012316028
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3847527320514715790}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 4.106761
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &4680752840554238703
 GameObject:
   m_ObjectHideFlags: 0

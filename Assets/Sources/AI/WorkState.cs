@@ -87,7 +87,7 @@ namespace LDJAM45
             }
             else if (job == JobType.BUILDER)
             {
-                GameManager.instance.boatProgress += 0.1f;
+                GameManager.instance.boatProgress += 5f;
             }
             else if (job == JobType.WARRIOR)
             {

@@ -5,6 +5,7 @@ namespace LDJAM45
     public class BoatConstructionSite : MonoBehaviour
     {
         public Transform sprite;
+        public TMPro.TextMeshProUGUI progressField;
 
         public Vector2 origin;
         public Vector2 destintion;
@@ -19,6 +20,16 @@ namespace LDJAM45
 
         void Update()
         {
+            float progress = GameManager.instance.boatProgress;
+            progressField.text = progress.ToString().Substring(0, Mathf.Min(progress.ToString().Length, 3)) + "%";
+
+            if (GameManager.instance.boatProgress >= 100)
+            {
+                sprite.rotation = Quaternion.Euler(0, 0, 90);
+                sprite.localPosition = Vector2.up * 2;
+                return;
+            }
+
             float dx = (GameManager.instance.boatProgress / 100);
             sprite.localPosition = Vector2.Lerp(origin, destintion, dx);
         }
