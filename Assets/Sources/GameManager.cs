@@ -55,13 +55,20 @@ namespace LDJAM45
             if (period == DayPeriod.DAWN)
             {
                 dayCount++;
-                int x = dayCount < 2 ? 0 : dayCount - 2;
 
-                if (x > 0)
+                if (dayCount > 1)
+                {
+                    SpawnManyWolfs(fishCount * fishCount);
+                }
+            }
+            else if (period == DayPeriod.DUSK)
+            {
+                int count = FindObjectsOfType<WolfSpawn>().Length;
+
+                if (count > 0)
                 {
                     speaker.clip = wolfComing;
                     speaker.Play();
-                    SpawnManyWolfs(x * x);
                 }
             }
         }
@@ -109,8 +116,9 @@ namespace LDJAM45
             bool victory = false;
             if (!victory && boatProgress >= 100)
             {
-                SceneManager.LoadScene("VictoryScene");
                 victory = true;
+                SceneManager.UnloadSceneAsync("GameScene");
+                SceneManager.LoadScene("VictoryScene");
             }
 
             foodField.text = "x " + fishCount;
@@ -163,22 +171,28 @@ namespace LDJAM45
 
         private void SpawnManyWolfs(int population)
         {
-            foreach (var slab in map)
+            int maxTurn = 10;
+            while (population > 0 && maxTurn > 0)
             {
-                if (slab.type == IslandSlab.FOREST && slab.camp == null)
+                foreach (var slab in map)
                 {
-                    for (int i = 0; i < UnityEngine.Random.Range(1, 5); i++)
+                    if (slab.type == IslandSlab.FOREST && slab.camp == null)
                     {
-                        population--;
-                        Instantiate(wolfSpawn, new Vector2(slab.transform.position.x + UnityEngine.Random.insideUnitCircle.x * 5, Utils.REAL_GROUND_HEIGHT), Quaternion.identity);
-
-                        if (population <= 0)
+                        for (int i = 0; i < UnityEngine.Random.Range(1, 5); i++)
                         {
-                            return;
+                            population--;
+                            Instantiate(wolfSpawn, new Vector2(slab.transform.position.x + UnityEngine.Random.insideUnitCircle.x * 5, Utils.REAL_GROUND_HEIGHT), Quaternion.identity);
+
+                            if (population <= 0)
+                            {
+                                return;
+                            }
                         }
                     }
                 }
+                maxTurn--;
             }
+
         }
 
         private void SpawnArrow(Vector2 position)

@@ -55,7 +55,7 @@ namespace LDJAM45
             else if (job == JobType.WARRIOR)
             {
                 // ? Either stand at the left or the right hand-side of the camp.
-                float offset = Mathf.Sign(UnityEngine.Random.value - 0.5f) * 2 * 8 + UnityEngine.Random.insideUnitCircle.x * 2;
+                float offset = Mathf.Sign(UnityEngine.Random.value - 0.5f) * 2 * 5 + UnityEngine.Random.insideUnitCircle.x * 2;
                 workPlace = new Vector2(GameManager.instance.camp.position.x + offset, myTransform.position.y);
             }
 
