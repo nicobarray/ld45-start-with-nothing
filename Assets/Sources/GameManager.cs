@@ -21,6 +21,7 @@ namespace LDJAM45
         public IslandSlab type;
         public Transform transform;
         public Transform camp;
+        public int wanderersCount;
     }
 
     public class GameManager : MonoBehaviour
@@ -56,7 +57,7 @@ namespace LDJAM45
 
                 if (dayCount > 1)
                 {
-                    SpawnManyWolfs(fishCount + UnityEngine.Random.Range(0, dayCount));
+                    SpawnManyWolfs(fishCount + dayCount);
                 }
 
                 foreach (var slab in map)
@@ -80,6 +81,22 @@ namespace LDJAM45
             }
         }
 
+        public bool FindSlab(Transform where, out Slab slab)
+        {
+            for (int i = 0; i < map.Length; i++)
+            {
+                var item = map[i];
+                if (item.transform == where)
+                {
+                    slab = item;
+                    return true;
+                }
+            }
+
+            slab = map[0];
+            return false;
+        }
+
         public void RemoveFish()
         {
             var go = Instantiate(notifPrefab, notifParent);
@@ -87,7 +104,7 @@ namespace LDJAM45
         }
 
         private int dayCount = 1;
-        private Slab[] map;
+        public Slab[] map;
 
         [Header("References")]
         public UnityEvent onClickOutside;
@@ -131,7 +148,6 @@ namespace LDJAM45
 
         void Update()
         {
-
             if (!victory && boatProgress >= 100)
             {
                 victory = true;
@@ -210,7 +226,7 @@ namespace LDJAM45
                 {
                     if (slab.type == IslandSlab.FOREST && slab.camp == null && Vector2.Distance(slab.transform.position, camp.position) > 15)
                     {
-                        for (int i = 0; i < UnityEngine.Random.Range(1, 5); i++)
+                        for (int i = 0; i < 3; i++)
                         {
                             if (population <= 0)
                             {
@@ -219,13 +235,12 @@ namespace LDJAM45
 
                             population--;
                             Instantiate(wolfSpawn, new Vector2(slab.transform.position.x + UnityEngine.Random.insideUnitCircle.x * 5, Utils.REAL_GROUND_HEIGHT), Quaternion.identity);
-
                         }
                     }
                 }
+
                 maxTurn--;
             }
-
         }
 
         private void SpawnArrow(Vector2 position)

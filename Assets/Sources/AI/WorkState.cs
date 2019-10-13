@@ -70,14 +70,14 @@ namespace LDJAM45
             // ? Do the work.
             if (job == JobType.FISHERMAN)
             {
-                if (UnityEngine.Random.value > 0.5)
+                if (UnityEngine.Random.value > 0.75)
                 {
                     GameManager.instance.SpawnFish(myTransform.position);
                 }
             }
             else if (job == JobType.BUILDER)
             {
-                GameManager.instance.boatProgress += 0.005f;
+                GameManager.instance.boatProgress += 0.2f;
             }
             else if (job == JobType.WARRIOR)
             {
@@ -116,23 +116,20 @@ namespace LDJAM45
             return CrewState.WORK;
         }
 
-        // private float GetJobDuration()
-        // {
+        private float GetJobDuration()
+        {
+            if (job == JobType.FISHERMAN)
+            {
+                return 3;
+            }
 
-        //     return 3;
+            if (job == JobType.BUILDER)
+            {
+                return 3;
+            }
 
-        //     if (job == JobType.FISHERMAN)
-        //     {
-        //         return 6;
-        //     }
-
-        //     if (job == JobType.BUILDER)
-        //     {
-        //         return 3;
-        //     }
-
-        //     return 3;
-        // }
+            return 3;
+        }
 
         public override CrewState Update()
         {
@@ -140,7 +137,7 @@ namespace LDJAM45
             if (taskDuration)
             {
                 taskDurationTimer += Time.deltaTime;
-                if (taskDurationTimer > 3)//GetJobDuration())
+                if (taskDurationTimer > GetJobDuration())
                 {
                     return Work();
                 }
@@ -163,5 +160,4 @@ namespace LDJAM45
             return CrewState.WORK;
         }
     }
-
 }

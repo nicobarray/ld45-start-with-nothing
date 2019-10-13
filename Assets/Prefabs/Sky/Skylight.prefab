@@ -86,7 +86,7 @@ MonoBehaviour:
   timeSpeed: 1
   period: 3
   dayIntensity: 0.95
-  dayLength: 6
+  dayLength: 10
   dayTint: {r: 1, g: 1, b: 1, a: 1}
   nightIntensity: 0.25
   nightLength: 8

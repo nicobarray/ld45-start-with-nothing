@@ -159,6 +159,11 @@ namespace LDJAM45
 
         public void Wander(Transform around)
         {
+            Slab camp;
+            bool isFound = GameManager.instance.FindSlab(around, out camp);
+            if (isFound)
+                camp.wanderersCount++;
+
             job = JobType.WANDERER;
             UpdateSprite(true, false);
             Idle(around);
@@ -257,11 +262,6 @@ namespace LDJAM45
 
         public bool Recruit(JobType job)
         {
-            if (this.job != JobType.WANDERER)
-            {
-                return false;
-            }
-
             if (GameManager.instance.fishCount == 0)
             {
                 return false;
@@ -272,6 +272,16 @@ namespace LDJAM45
             spriteRenderer.sprite = GetSprite();
 
             Unselect();
+
+            // ? Find slab and remove 1 wanderer.
+            for (int i = 0; i < GameManager.instance.map.Length; i++)
+            {
+                var item = GameManager.instance.map[i];
+                if (item.wanderersCount > 0 && item.transform == lastTargetAround)
+                {
+                    item.wanderersCount--;
+                }
+            }
 
             if (job == JobType.WARRIOR && GameManager.instance.period == DayPeriod.NIGHT
                 || job != JobType.WARRIOR && GameManager.instance.period == DayPeriod.DAY)
@@ -290,11 +300,6 @@ namespace LDJAM45
         {
             Player p = FindObjectOfType<Player>();
             if (Vector2.Distance(p.transform.position, transform.position) > 10)
-            {
-                return;
-            }
-
-            if (job != JobType.WANDERER)
             {
                 return;
             }
@@ -337,12 +342,21 @@ namespace LDJAM45
 
             if (state == CrewState.IDLE || state == CrewState.WORK)
             {
-                CrewState nextState = stateHandler.Update();
+                CrewState nextState = state;
+                nextState = stateHandler.Update();
 
                 if (job == JobType.WANDERER)
                 {
                     // ? A wanderer does not have a job.
                     return;
+                }
+
+                if (state == CrewState.IDLE && job == JobType.WARRIOR)
+                {
+                    if (GameManager.instance.FindWolfs().Length > 0)
+                    {
+                        nextState = CrewState.WORK;
+                    }
                 }
 
                 if (nextState != state)

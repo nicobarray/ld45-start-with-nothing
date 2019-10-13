@@ -40,6 +40,7 @@ namespace LDJAM45
         {
             rb.velocity = new Vector2(UnityEngine.Random.insideUnitCircle.x * 2, 10);
             box.enabled = false;
+            Destroy(gameObject, 30);
         }
 
         void Update()

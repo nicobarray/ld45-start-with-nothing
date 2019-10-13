@@ -22,6 +22,36 @@ namespace LDJAM45
         public Transform slabParent;
         public Transform islandObjectsParent;
 
+        void OnEnable()
+        {
+            Pubsub.instance.On(EventName.PeriodUpdate, OnPeriodUpdate);
+        }
+        void OnDisable()
+        {
+            Pubsub.instance.Off(EventName.PeriodUpdate, OnPeriodUpdate);
+        }
+
+        void OnPeriodUpdate(object args)
+        {
+            DayPeriod period = (DayPeriod)args;
+            if (period == DayPeriod.DAWN)
+            {
+                for (int i = 0; i < GameManager.instance.map.Length; i++)
+                {
+                    var item = GameManager.instance.map[i];
+                    if (item.camp == null)
+                    {
+                        continue;
+                    }
+
+                    if (item.wanderersCount == 0 && UnityEngine.Random.value < 0.5f)
+                    {
+                        SpawnWanderer(item);
+                    }
+                }
+            }
+        }
+
         public Slab[] Generate(int islandSize)
         {
             Slab[] islandSlabs = new Slab[islandSize];
@@ -89,7 +119,7 @@ namespace LDJAM45
                     boatCampGameObject.transform.position = new Vector2(slabGameObject.transform.position.Vec2().x + 10, 0);
                     GameManager.instance.boatCamp = boatCampGameObject.transform;
 
-                    SpawnWanderer(campGameObject.transform);
+                    SpawnWanderer(islandSlabs[i]);
                 }
 
                 if (islandSlabs[i].type != IslandSlab.CAMP)
@@ -112,7 +142,7 @@ namespace LDJAM45
                             int crewMembersCount = UnityEngine.Random.Range(1, 4);
                             for (int c = 0; c < crewMembersCount; c++)
                             {
-                                SpawnWanderer(campGameObject.transform);
+                                SpawnWanderer(islandSlabs[i]);
                             }
                         }
                     }
@@ -122,13 +152,15 @@ namespace LDJAM45
             return islandSlabs;
         }
 
-        private void SpawnWanderer(Transform around)
+        public void SpawnWanderer(Slab slab)
         {
+            slab.wanderersCount++;
             GameObject crewMember = Instantiate(crewPrefab, islandObjectsParent.transform);
             crewMember.transform.position = Vector2.up * Utils.REAL_GROUND_HEIGHT
-                                            + Vector2.right * around.position.Vec2().x
+                                            + Vector2.right * slab.transform.position.Vec2().x
                                             + Vector2.right * (UnityEngine.Random.value - 0.5f) * 2 * 3;
-            crewMember.GetComponent<Crew>().Idle(around);
+            crewMember.GetComponent<Crew>().Idle(slab.transform);
+
         }
     }
 }

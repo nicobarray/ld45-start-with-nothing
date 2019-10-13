@@ -1214,16 +1214,6 @@ PrefabInstance:
       propertyPath: planetAnchor
       value: 
       objectReference: {fileID: 1883234560}
-    - target: {fileID: 8529798119482068610, guid: 5736b49e08bf64364b49d13d166d9542,
-        type: 3}
-      propertyPath: dayLength
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 8529798119482068610, guid: 5736b49e08bf64364b49d13d166d9542,
-        type: 3}
-      propertyPath: nightLength
-      value: 10
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5736b49e08bf64364b49d13d166d9542, type: 3}
 --- !u!1001 &4167112048477879310
@@ -1403,6 +1393,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3527834056427770712, guid: 1b9a88f13e5c647a3b89c02346b8f67d,
         type: 3}
+    - target: {fileID: 6274795226596930267, guid: 0eba08d8f3f594ed799deb2e18ef23b3,
+        type: 3}
+      propertyPath: islandSize
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 2834304142414352876, guid: 0eba08d8f3f594ed799deb2e18ef23b3,
         type: 3}
       propertyPath: m_LocalPosition.x
